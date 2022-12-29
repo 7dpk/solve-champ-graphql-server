@@ -1,5 +1,6 @@
 import prisma from "../../db"
 import builder from "../builder"
+
 builder.prismaObject("Test", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -18,6 +19,17 @@ builder.prismaObject("Test", {
     questionCount: t.int({
       resolve: (test) => test.questionIds.length,
     }),
+    // attempted: t.boolean({
+    //   resolve: async (test) => {
+    //     const testHistory: TestHistory[] = await prisma.testHistory.findMany({
+    //       where: {
+    //         userId: uid,
+    //       },
+    //     })
+    //     console.log(testHistory)
+    //     return true
+    //   },
+    // }),
     testHistory: t.relation("testHistory"),
     testHistoryCount: t.relationCount("testHistory"),
     allRatings: t.relation("allRatings"),
@@ -54,3 +66,15 @@ builder.mutationField("createTest", (t) =>
       }),
   })
 )
+
+// builder.queryField("User", (t) =>
+//   t.prismaField({
+//     type: ["Test"],
+//     args: {
+//       uid: t.arg.string()
+//     },
+//     resolve: (query, root, args, ctx) => {
+
+//     }
+//   })
+// )

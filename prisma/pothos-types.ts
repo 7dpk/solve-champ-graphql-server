@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { Prisma, EnrollHistory, User, TestHistory, Question, Test, Chapter, Rating } from "@prisma/client";
+import type { Prisma, EnrollHistory, User, TestHistory, Question, Test, DailyTest, Chapter, Rating } from "@prisma/client";
 export default interface PrismaTypes {
     EnrollHistory: {
         Name: "EnrollHistory";
@@ -72,12 +72,16 @@ export default interface PrismaTypes {
         OrderBy: Prisma.QuestionOrderByWithRelationInput;
         WhereUnique: Prisma.QuestionWhereUniqueInput;
         Where: Prisma.QuestionWhereInput;
-        RelationName: "tests";
-        ListRelations: "tests";
+        RelationName: "tests" | "dailyTests";
+        ListRelations: "tests" | "dailyTests";
         Relations: {
             tests: {
                 Shape: Test[];
                 Types: PrismaTypes["Test"];
+            };
+            dailyTests: {
+                Shape: DailyTest[];
+                Types: PrismaTypes["DailyTest"];
             };
         };
     };
@@ -107,6 +111,23 @@ export default interface PrismaTypes {
             allRatings: {
                 Shape: Rating[];
                 Types: PrismaTypes["Rating"];
+            };
+        };
+    };
+    DailyTest: {
+        Name: "DailyTest";
+        Shape: DailyTest;
+        Include: Prisma.DailyTestInclude;
+        Select: Prisma.DailyTestSelect;
+        OrderBy: Prisma.DailyTestOrderByWithRelationInput;
+        WhereUnique: Prisma.DailyTestWhereUniqueInput;
+        Where: Prisma.DailyTestWhereInput;
+        RelationName: "questions";
+        ListRelations: "questions";
+        Relations: {
+            questions: {
+                Shape: Question[];
+                Types: PrismaTypes["Question"];
             };
         };
     };

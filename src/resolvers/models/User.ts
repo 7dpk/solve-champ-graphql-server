@@ -20,6 +20,7 @@ builder.prismaObject("User", {
     studentClass: t.exposeString("studentClass"),
     pro: t.exposeBoolean("pro", { nullable: true }),
     language: t.exposeString("language"),
+    district: t.exposeString("district", { nullable: true }),
     enrollHistory: t.relation("enrollHistory"),
     testHistory: t.relation("testHistory"),
     testHistoryCount: t.relationCount("testHistory"),
@@ -61,6 +62,7 @@ builder.mutationField("createUser", (t) =>
       board: t.arg.string({ required: true }),
       studentClass: t.arg.string({ required: true }),
       language: t.arg.string({ required: true }),
+      district: t.arg.string(),
     },
     resolve: (query, root, args, ctx) =>
       prisma.user.create({
@@ -80,7 +82,9 @@ builder.mutationField("updateUser", (t) =>
       name: t.arg.string({ required: true }),
       email: t.arg.string(),
       mobile: t.arg.string({ required: true }),
-      dob: t.arg.string(),
+      dob: t.arg({
+        type: "Date",
+      }),
       gender: t.arg.string(),
       pic_url: t.arg.string(),
       pincode: t.arg.int(),
@@ -88,6 +92,7 @@ builder.mutationField("updateUser", (t) =>
       board: t.arg.string({ required: true }),
       studentClass: t.arg.string({ required: true }),
       language: t.arg.string({ required: true }),
+      district: t.arg.string(),
     },
 
     resolve: (query, root, args, ctx) => {

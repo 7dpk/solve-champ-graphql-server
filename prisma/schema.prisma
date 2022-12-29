@@ -2,14 +2,11 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator prisma {
-  provider        = "prisma-client-js"
-  previewFeatures = ["filteredRelationCount"]
+  provider = "prisma-client-js"
 }
 
 generator pothos {
-  provider     = "prisma-pothos-types"
-  clientOutput = "@prisma/client"
-  output       = "./pothos-types.ts"
+  provider = "prisma-pothos-types"
 }
 
 datasource db {
@@ -41,6 +38,7 @@ model User {
   studentClass String
   pro          Boolean?  @default(false)
   language     String    @default("Hindi")
+  district     String?   @default("")
 
   enrollHistory EnrollHistory[]
   testHistory   TestHistory[]
@@ -79,6 +77,8 @@ model Question {
   difficultyLevel DifficultyLevel @default(EASY)
   testIds         String[]        @db.ObjectId
   tests           Test[]          @relation(fields: [testIds], references: [id])
+  dailyTestIds    String[]        @db.ObjectId
+  dailyTests      DailyTest[]     @relation(fields: [dailyTestIds], references: [id])
 }
 
 model Test {
@@ -98,6 +98,17 @@ model Test {
   questions    Question[]    @relation(fields: [questionIds], references: [id])
   testHistory  TestHistory[]
   allRatings   Rating[]
+}
+
+model DailyTest {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  testClass   String
+  board       String
+  subject     String
+  createdAt   DateTime?  @default(now())
+  questionIds String[]   @db.ObjectId
+  questions   Question[] @relation(fields: [questionIds], references: [id])
 }
 
 model Chapter {

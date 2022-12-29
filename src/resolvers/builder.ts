@@ -1,21 +1,21 @@
 import SchemaBuilder from "@pothos/core"
 import PrismaPlugin from "@pothos/plugin-prisma"
 import type PrismaTypes from "@pothos/plugin-prisma/generated"
-import WithInputPlugin from "@pothos/plugin-with-input"
+// import WithInputPlugin from "@pothos/plugin-with-input"
 import ValidationPlugin from "@pothos/plugin-validation"
-import ErrorsPlugin from "@pothos/plugin-errors"
+// import ErrorsPlugin from "@pothos/plugin-errors"
 import prisma from "../db"
 import { DateResolver } from "graphql-scalars"
 import { ZodError, ZodFormattedError } from "zod"
 
 const builder = new SchemaBuilder<{
+  PrismaTypes: PrismaTypes
   Scalars: {
     Date: { Input: Date; Output: Date }
   }
-  PrismaTypes: PrismaTypes
   WithInputArgRequired: false
 }>({
-  plugins: [PrismaPlugin, WithInputPlugin, ErrorsPlugin, ValidationPlugin],
+  plugins: [PrismaPlugin, ValidationPlugin],
   prisma: {
     client: prisma,
     // defaults to false, uses /// comments from prisma schema as descriptions
@@ -24,18 +24,6 @@ const builder = new SchemaBuilder<{
     exposeDescriptions: false,
     // use where clause from prismaRelatedConnection for totalCount (will true by default in next major version)
     filterConnectionTotalCount: true,
-  },
-  withInput: {
-    typeOptions: {
-      // default options for Input object types created by this plugin
-    },
-    argOptions: {
-      // set required: false to override default behavior
-      required: false,
-    },
-  },
-  errorOptions: {
-    defaultTypes: [Error],
   },
   validationOptions: {
     // optionally customize how errors are formatted
