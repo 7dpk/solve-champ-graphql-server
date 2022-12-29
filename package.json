@@ -1,0 +1,35 @@
+{
+  "name": "temp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "rimraf ./build && tsc",
+    "start": "npm run build && node build/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20221111.1",
+    "@types/node": "^18.11.17",
+    "nodemon": "^2.0.20",
+    "prisma": "^4.8.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4",
+    "wrangler": "^2.6.2"
+  },
+  "dependencies": {
+    "@pothos/core": "^3.24.0",
+    "@pothos/plugin-errors": "^3.9.0",
+    "@pothos/plugin-prisma": "^3.39.0",
+    "@pothos/plugin-validation": "^3.8.7",
+    "@pothos/plugin-with-input": "^3.9.7",
+    "@prisma/client": "^4.8.0",
+    "graphql-scalars": "^1.20.1",
+    "graphql-yoga": "^3.1.2",
+    "zod": "^3.20.2"
+  }
+}

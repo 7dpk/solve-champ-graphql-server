@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator prisma {
+  provider        = "prisma-client-js"
+  previewFeatures = ["filteredRelationCount"]
+}
+
+generator pothos {
+  provider     = "prisma-pothos-types"
+  clientOutput = "@prisma/client"
+  output       = "./pothos-types.ts"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model EnrollHistory {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  date       DateTime @default(now())
+  courseName String
+  price      String
+  userId     String
+  user       User     @relation(fields: [userId], references: [uid])
+}
+
+model User {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  uid          String    @unique
+  name         String
+  email        String?   @default("")
+  mobile       String    @unique
+  dob          DateTime? @default(now())
+  gender       String?   @default("")
+  pic_url      String?   @default("https://0x0.st/onc6.jpg")
+  pincode      Int?      @default(0)
+  schoolName   String    @default("")
+  board        String
+  studentClass String
+  pro          Boolean?  @default(false)
+  language     String    @default("Hindi")
+
+  enrollHistory EnrollHistory[]
+  testHistory   TestHistory[]
+  allRatings    Rating[]
+}
+
+model TestHistory {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  testId           String    @db.ObjectId
+  test             Test      @relation(fields: [testId], references: [id])
+  userId           String
+  user             User      @relation(fields: [userId], references: [uid])
+  date             DateTime? @default(now())
+  userResponses    Int[]
+  correctResponses Int[]
+}
+
+enum DifficultyLevel {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Question {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  chapter         String[]
+  options         String[]
+  details         String
+  correctOption   Int
+  explanation     String?
+  image           String?
+  tags            String[]
+  subject         String
+  questionClass   String
+  createdBy       String          @default("")
+  difficultyLevel DifficultyLevel @default(EASY)
+  testIds         String[]        @db.ObjectId
+  tests           Test[]          @relation(fields: [testIds], references: [id])
+}
+
+model Test {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  instructions String[]      @default(["एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।", "एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।", "एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।"])
+  rating       Float?        @default(3.0)
+  testClass    String
+  board        String
+  subject      String
+  totalMarks   Int           @default(100)
+  paid         Boolean       @default(false)
+  passingMarks Int           @default(40)
+  chapterId    String        @db.ObjectId
+  chapter      Chapter       @relation(fields: [chapterId], references: [id])
+  questionIds  String[]      @db.ObjectId
+  questions    Question[]    @relation(fields: [questionIds], references: [id])
+  testHistory  TestHistory[]
+  allRatings   Rating[]
+}
+
+model Chapter {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  logo    String?  @default("https://0x0.st/oncE.jpg")
+  class   String
+  subject String
+  board   String
+  testIds String[] @db.ObjectId
+  tests   Test[]
+}
+
+model Rating {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  testId   String    @db.ObjectId
+  test     Test      @relation(fields: [testId], references: [id])
+  userId   String
+  user     User      @relation(fields: [userId], references: [uid])
+  date     DateTime? @default(now())
+  response Float     @default(4)
+}

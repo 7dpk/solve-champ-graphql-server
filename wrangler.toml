@@ -1,0 +1,6 @@
+compatibility_date = "2022-06-23"
+name = "graphql-yoga"
+account_id = "bfdb94b8923e077131541a70aaa2d38d"
+workers_dev = true
+main = "src/index.ts"
+compatibility_flags = ["streams_enable_constructors"]
