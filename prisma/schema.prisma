@@ -77,13 +77,11 @@ model Question {
   difficultyLevel DifficultyLevel @default(EASY)
   testIds         String[]        @db.ObjectId
   tests           Test[]          @relation(fields: [testIds], references: [id])
-  dailyTestIds    String[]        @db.ObjectId
-  dailyTests      DailyTest[]     @relation(fields: [dailyTestIds], references: [id])
 }
 
 model Test {
   id           String        @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
+  name         String        @unique
   instructions String[]      @default(["एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।", "एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।", "एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।"])
   rating       Float?        @default(3.0)
   testClass    String
@@ -93,22 +91,13 @@ model Test {
   paid         Boolean       @default(false)
   passingMarks Int           @default(40)
   chapterId    String        @db.ObjectId
+  dailyTest    Boolean?      @default(false)
+  date         DateTime?     @default(now())
   chapter      Chapter       @relation(fields: [chapterId], references: [id])
   questionIds  String[]      @db.ObjectId
   questions    Question[]    @relation(fields: [questionIds], references: [id])
   testHistory  TestHistory[]
   allRatings   Rating[]
-}
-
-model DailyTest {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  testClass   String
-  board       String
-  subject     String
-  createdAt   DateTime?  @default(now())
-  questionIds String[]   @db.ObjectId
-  questions   Question[] @relation(fields: [questionIds], references: [id])
 }
 
 model Chapter {

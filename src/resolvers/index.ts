@@ -6,7 +6,7 @@ import "./models/EnrollHistory"
 import "./models/Question"
 import "./models/Rating"
 import "./models/TestHistory"
-import "./models/DailyTest"
+// import "./models/DailyTest"
 import "./Query"
 import "./Mutation"
 export default builder

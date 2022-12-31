@@ -1,3 +1,13 @@
+import { read, readFileSync } from "fs"
+import { MongoClient } from "mongodb"
+import { Test, QuestionFromSheet, Question } from "./interfaces"
+
+const data = readFileSync("question.json")
+let Sheet1: QuestionFromSheet[] = JSON.parse(data.toString())["Sheet1"]
+let tests = new Set()
+Sheet1.forEach((q) => tests.add(q["testname"]))
+console.log(tests)
+
 // type arr = Array<number>
 // const last = <T>(arr: T[]): T => {
 //   return arr[arr.length - 1]
