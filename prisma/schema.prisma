@@ -39,6 +39,7 @@ model User {
   pro          Boolean?  @default(false)
   language     String    @default("Hindi")
   district     String?   @default("")
+  target       String[]
 
   enrollHistory EnrollHistory[]
   testHistory   TestHistory[]
@@ -119,4 +120,14 @@ model Rating {
   user     User      @relation(fields: [userId], references: [uid])
   date     DateTime? @default(now())
   response Float     @default(4)
+}
+
+model DailyTips {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  date    DateTime? @default(now())
+  videoId String
+  header  String
+  bgcolor String?
+  imgUrl  String
+  apiKey  String
 }

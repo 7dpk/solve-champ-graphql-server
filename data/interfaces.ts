@@ -1,3 +1,10 @@
+import { ObjectId } from "mongodb"
+
+enum DifficultyLevel {
+  EASY,
+  MEDIUM,
+  HARD,
+}
 export interface QuestionFromSheet {
   SrNo: number
   Question: string
@@ -8,9 +15,20 @@ export interface QuestionFromSheet {
   Subject: string
   Language: string
 }
-export interface Test {
+export type C = {
+  id: string
   name: string
-  rating: number
+  logo: string | null
+  class: string
+  subject: string
+  board: string
+  testIds: string[]
+}
+export type T = {
+  id: string
+  name: string
+  instructions: string[]
+  rating: number | null
   testClass: string
   board: string
   subject: string
@@ -18,20 +36,24 @@ export interface Test {
   paid: boolean
   passingMarks: number
   chapterId: string
+  dailyTest: boolean | null
+  date: Date | null
   questionIds: string[]
 }
-export interface Question {
+export type Q = {
+  id: string
   chapter: string[]
   options: string[]
   details: string
   correctOption: number
-  explanation?: string
-  image?: string
+  explanation: string | null
+  image: string | null
   tags: string[]
   subject: string
   questionClass: string
-  createBy: string
+  createdBy: string
   difficultyLevel: string
+  testIds: string[]
 }
 /*
   chapter         String[]

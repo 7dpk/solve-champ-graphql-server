@@ -1,6 +1,6 @@
 import builder from "../builder"
 import prisma from "../../db"
-import { number, z, ZodError } from "zod"
+import { z } from "zod"
 builder.prismaObject("User", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -21,6 +21,7 @@ builder.prismaObject("User", {
     pro: t.exposeBoolean("pro", { nullable: true }),
     language: t.exposeString("language"),
     district: t.exposeString("district", { nullable: true }),
+    target: t.exposeStringList("target"),
     enrollHistory: t.relation("enrollHistory"),
     testHistory: t.relation("testHistory"),
     testHistoryCount: t.relationCount("testHistory"),
@@ -63,6 +64,7 @@ builder.mutationField("createUser", (t) =>
       studentClass: t.arg.string({ required: true }),
       language: t.arg.string({ required: true }),
       district: t.arg.string(),
+      target: t.arg.stringList({ required: true }),
     },
     resolve: (query, root, args, ctx) =>
       prisma.user.create({
@@ -93,6 +95,7 @@ builder.mutationField("updateUser", (t) =>
       studentClass: t.arg.string({ required: true }),
       language: t.arg.string({ required: true }),
       district: t.arg.string(),
+      target: t.arg.stringList({ required: true }),
     },
 
     resolve: (query, root, args, ctx) => {

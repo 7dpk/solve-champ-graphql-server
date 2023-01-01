@@ -14,6 +14,11 @@ builder.prismaObject("Test", {
     totalMarks: t.exposeInt("totalMarks"),
     paid: t.exposeBoolean("paid"),
     passingMarks: t.exposeInt("passingMarks"),
+    dailyTest: t.exposeBoolean("dailyTest", { nullable: true }),
+    date: t.expose("date", {
+      type: "Date",
+      nullable: true,
+    }),
     chapter: t.relation("chapter"),
     questions: t.relation("questions"),
     questionCount: t.int({
@@ -57,6 +62,10 @@ builder.mutationField("createTest", (t) =>
       passingMarks: t.arg.int({ required: true }),
       chapterId: t.arg.string({ required: true }),
       questionIds: t.arg.stringList({ required: true }),
+      dailyTest: t.arg.boolean(),
+      date: t.arg({
+        type: "Date",
+      }),
     },
     resolve: (query, root, args, ctx) =>
       prisma.test.create({
