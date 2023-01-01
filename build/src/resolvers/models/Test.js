@@ -18,11 +18,27 @@ builder_1.default.prismaObject("Test", {
         totalMarks: t.exposeInt("totalMarks"),
         paid: t.exposeBoolean("paid"),
         passingMarks: t.exposeInt("passingMarks"),
+        dailyTest: t.exposeBoolean("dailyTest", { nullable: true }),
+        date: t.expose("date", {
+            type: "Date",
+            nullable: true,
+        }),
         chapter: t.relation("chapter"),
         questions: t.relation("questions"),
         questionCount: t.int({
             resolve: (test) => test.questionIds.length,
         }),
+        // attempted: t.boolean({
+        //   resolve: async (test) => {
+        //     const testHistory: TestHistory[] = await prisma.testHistory.findMany({
+        //       where: {
+        //         userId: uid,
+        //       },
+        //     })
+        //     console.log(testHistory)
+        //     return true
+        //   },
+        // }),
         testHistory: t.relation("testHistory"),
         testHistoryCount: t.relationCount("testHistory"),
         allRatings: t.relation("allRatings"),
@@ -48,8 +64,39 @@ builder_1.default.mutationField("createTest", (t) => t.prismaField({
         passingMarks: t.arg.int({ required: true }),
         chapterId: t.arg.string({ required: true }),
         questionIds: t.arg.stringList({ required: true }),
+        dailyTest: t.arg.boolean(),
+        date: t.arg({
+            type: "Date",
+        }),
     },
     resolve: (query, root, args, ctx) => db_1.default.test.create({
         data: Object.assign({}, args),
     }),
 }));
+builder_1.default.mutationField("insertQuestion", (t) => t.prismaField({
+    type: "Test",
+    args: {
+        name: t.arg.string({ required: true }),
+        questionId: t.arg.string({ required: true }),
+    },
+    resolve: (query, _, args, ctx) => db_1.default.test.update({
+        where: {
+            name: args.name,
+        },
+        data: {
+            questionIds: {
+                push: args.questionId,
+            },
+        },
+    }),
+}));
+// builder.queryField("User", (t) =>
+//   t.prismaField({
+//     type: ["Test"],
+//     args: {
+//       uid: t.arg.string()
+//     },
+//     resolve: (query, root, args, ctx) => {
+//     }
+//   })
+// )

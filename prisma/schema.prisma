@@ -129,5 +129,4 @@ model DailyTips {
   header  String
   bgcolor String?
   imgUrl  String
-  apiKey  String
 }

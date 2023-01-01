@@ -11,6 +11,7 @@ require("./models/EnrollHistory");
 require("./models/Question");
 require("./models/Rating");
 require("./models/TestHistory");
+require("./models/DailyTips");
 require("./Query");
 require("./Mutation");
 exports.default = builder_1.default;

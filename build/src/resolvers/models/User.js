@@ -25,6 +25,8 @@ builder_1.default.prismaObject("User", {
         studentClass: t.exposeString("studentClass"),
         pro: t.exposeBoolean("pro", { nullable: true }),
         language: t.exposeString("language"),
+        district: t.exposeString("district", { nullable: true }),
+        target: t.exposeStringList("target"),
         enrollHistory: t.relation("enrollHistory"),
         testHistory: t.relation("testHistory"),
         testHistoryCount: t.relationCount("testHistory"),
@@ -64,6 +66,8 @@ builder_1.default.mutationField("createUser", (t) => t.prismaField({
         board: t.arg.string({ required: true }),
         studentClass: t.arg.string({ required: true }),
         language: t.arg.string({ required: true }),
+        district: t.arg.string(),
+        target: t.arg.stringList({ required: true }),
     },
     resolve: (query, root, args, ctx) => db_1.default.user.create({
         data: Object.assign({}, args),
@@ -77,7 +81,9 @@ builder_1.default.mutationField("updateUser", (t) => t.prismaField({
         name: t.arg.string({ required: true }),
         email: t.arg.string(),
         mobile: t.arg.string({ required: true }),
-        dob: t.arg.string(),
+        dob: t.arg({
+            type: "Date",
+        }),
         gender: t.arg.string(),
         pic_url: t.arg.string(),
         pincode: t.arg.int(),
@@ -85,6 +91,8 @@ builder_1.default.mutationField("updateUser", (t) => t.prismaField({
         board: t.arg.string({ required: true }),
         studentClass: t.arg.string({ required: true }),
         language: t.arg.string({ required: true }),
+        district: t.arg.string(),
+        target: t.arg.stringList({ required: true }),
     },
     resolve: (query, root, args, ctx) => {
         const user = db_1.default.user.update({
