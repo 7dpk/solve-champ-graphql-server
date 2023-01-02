@@ -81,28 +81,40 @@ builder.mutationField("updateUser", (t) =>
     nullable: true,
     args: {
       uid: t.arg.string({ required: true }),
-      name: t.arg.string({ required: true }),
+      name: t.arg.string(),
       email: t.arg.string(),
-      mobile: t.arg.string({ required: true }),
+      mobile: t.arg.string(),
       dob: t.arg({
         type: "Date",
       }),
       gender: t.arg.string(),
       pic_url: t.arg.string(),
       pincode: t.arg.int(),
-      schoolName: t.arg.string({ required: true }),
-      board: t.arg.string({ required: true }),
-      studentClass: t.arg.string({ required: true }),
-      language: t.arg.string({ required: true }),
+      schoolName: t.arg.string(),
+      board: t.arg.string(),
+      studentClass: t.arg.string(),
+      language: t.arg.string(),
       district: t.arg.string(),
-      target: t.arg.stringList({ required: true }),
+      target: t.arg.stringList(),
     },
 
     resolve: (query, root, args, ctx) => {
       const user = prisma.user.update({
         where: { uid: args.uid },
         data: {
-          ...args,
+          name: args.name ?? undefined,
+          email: args.email ?? undefined,
+          mobile: args.mobile ?? undefined,
+          dob: args.dob ?? undefined,
+          gender: args.gender ?? undefined,
+          pic_url: args.pic_url ?? undefined,
+          pincode: args.pincode ?? undefined,
+          schoolName: args.schoolName ?? undefined,
+          board: args.board ?? undefined,
+          studentClass: args.studentClass ?? undefined,
+          language: args.language ?? undefined,
+          district: args.district ?? undefined,
+          target: args.target ?? undefined,
         },
       })
       return user
