@@ -2,7 +2,7 @@ import { readFileSync } from "fs"
 import { MongoClient, ObjectId } from "mongodb"
 import { QuestionFromSheet, T, Q, C } from "./interfaces"
 
-const cstring = "mongodb+srv://deepak:6LTl8KRtUM0Orqsf@s.5x4dc.mongodb.net"
+const cstring = ""
 const dbname = "studyChamptest"
 const data = readFileSync("./question.json")
 let Sheet1: QuestionFromSheet[] = JSON.parse(data.toString())["Sheet1"]
