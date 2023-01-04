@@ -3,8 +3,12 @@ import { MongoClient, ObjectId } from "mongodb"
 import { QuestionFromSheet, T, Q, C } from "./interfaces"
 import * as dotenv from "dotenv"
 
+<<<<<<< HEAD
 dotenv.config()
 const cstring = process.env.DATABASE_URL
+=======
+const cstring = ""
+>>>>>>> 7caa5d53fc7d4a53717c6587fa385a65ac7177d4
 const dbname = "studyChamptest"
 const data = readFileSync("./question.json")
 let Sheet1: QuestionFromSheet[] = JSON.parse(data.toString())["Sheet1"]
