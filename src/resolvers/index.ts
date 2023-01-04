@@ -7,6 +7,7 @@ import "./models/Question"
 import "./models/Rating"
 import "./models/TestHistory"
 import "./models/DailyTips"
+import "./models/Doubt"
 import "./Query"
 import "./Mutation"
 export default builder

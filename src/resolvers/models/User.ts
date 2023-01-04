@@ -22,6 +22,8 @@ builder.prismaObject("User", {
     language: t.exposeString("language"),
     district: t.exposeString("district", { nullable: true }),
     target: t.exposeStringList("target"),
+    doubt: t.relation("doubts"),
+    doubtCount: t.relationCount("doubts"),
     enrollHistory: t.relation("enrollHistory"),
     testHistory: t.relation("testHistory"),
     testHistoryCount: t.relationCount("testHistory"),

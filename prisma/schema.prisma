@@ -41,6 +41,7 @@ model User {
   district     String?   @default("")
   target       String[]
 
+  doubts        Doubt[]
   enrollHistory EnrollHistory[]
   testHistory   TestHistory[]
   allRatings    Rating[]
@@ -129,4 +130,15 @@ model DailyTips {
   header  String
   bgcolor String?
   imgUrl  String
+}
+
+model Doubt {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  doubtText   String
+  doubtPic    String?
+  solution    String?
+  solutionPic String?
+  date        DateTime? @default(now())
+  userId      String
+  user        User      @relation(fields: [userId], references: [uid])
 }
