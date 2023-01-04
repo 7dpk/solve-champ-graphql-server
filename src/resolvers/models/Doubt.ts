@@ -26,6 +26,21 @@ builder.queryField("allDoubts", (t) =>
   })
 )
 
+builder.queryField("doubt", (t) =>
+  t.prismaField({
+    type: "Doubt",
+    args: {
+      id: t.arg.string({ required: true }),
+    },
+    resolve: (query, root, args, ctx) =>
+      prisma.doubt.findUniqueOrThrow({
+        where: {
+          id: args.id,
+        },
+      }),
+  })
+)
+
 builder.mutationField("createDoubt", (t) =>
   t.prismaField({
     type: "Doubt",
