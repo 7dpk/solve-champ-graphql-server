@@ -106,6 +106,27 @@ builder.queryType({
           ...query,
         }),
     }),
+    // daily test
+    dailyTest: t.prismaField({
+      type: "Test",
+      nullable: true,
+      args: {
+        date: t.arg({
+          type: "Date",
+          required: true,
+        }),
+      },
+      resolve: (query, root, args, ctx) =>
+        prisma.test.findFirst({
+          where: {
+            dailyTest: true,
+            date: {
+              lte: args.date,
+            },
+          },
+        }),
+    }),
+
     allTests: t.prismaField({
       type: ["Test"],
       nullable: true,

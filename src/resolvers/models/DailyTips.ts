@@ -29,7 +29,7 @@ builder.queryField("dailyTips", (t) =>
       prisma.dailyTips.findFirst({
         where: {
           date: {
-            gte: args.date,
+            lte: args.date,
           },
         },
       }),
