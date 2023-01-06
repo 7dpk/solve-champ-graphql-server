@@ -1,1 +1,1 @@
-git add . && git commit -m "Updated" && git push origin main
+npx prisma db push && git add . && git commit -m "Updated" && git push origin main
