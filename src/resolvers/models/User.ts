@@ -103,7 +103,7 @@ builder.mutationField("updateUser", (t) =>
       target: t.arg.stringList(),
       rollCode: t.arg.string(),
       rollNo: t.arg.string(),
-      isScholarShip: t.arg.boolean(),
+      isScholarship: t.arg.boolean(),
     },
 
     resolve: (query, root, args, ctx) => {
@@ -125,7 +125,7 @@ builder.mutationField("updateUser", (t) =>
           target: args.target ?? undefined,
           rollCode: args.rollCode ?? undefined,
           rollNo: args.rollNo ?? undefined,
-          isScholarShip: args.isScholarShip ?? undefined,
+          isScholarship: args.isScholarship ?? undefined,
         },
       })
       return user

@@ -41,7 +41,7 @@ model User {
   district      String?   @default("")
   rollCode      String?
   rollNo        String?
-  isScholarShip Boolean?
+  isScholarship Boolean?
   target        String[]
 
   doubts        Doubt[]
