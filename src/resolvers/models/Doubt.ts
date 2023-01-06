@@ -1,6 +1,7 @@
 import builder from "../builder"
 import prisma from "../../db"
 import { Db, UnorderedBulkOperation } from "mongodb"
+import { MutationType } from "../../pubsub"
 builder.prismaObject("Doubt", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -69,14 +70,22 @@ builder.mutationField("updateDoubt", (t) =>
       solutionPic: t.arg.string(),
       userId: t.arg.string(),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.doubt.update({
+    resolve: async (query, root, args, ctx) => {
+      const doubt = await prisma.doubt.update({
         where: { id: args.id },
         data: {
-          ...args,
           doubtText: args.doubtText ?? undefined,
+          doubtPic: args.doubtPic ?? undefined,
+          solution: args.solution ?? undefined,
+          solutionPic: args.solutionPic ?? undefined,
           userId: args.userId ?? undefined,
         },
-      }),
+      })
+      ctx.pubsub.publish("doubt", doubt.id, {
+        mutationType: MutationType.UPDATED,
+        doubt,
+      })
+      return doubt
+    },
   })
 )

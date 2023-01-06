@@ -1,4 +1,5 @@
 import builder from "./builder"
+import "./Subscription"
 import "./models/User"
 import "./models/Test"
 import "./models/Chapter"
@@ -8,6 +9,7 @@ import "./models/Rating"
 import "./models/TestHistory"
 import "./models/DailyTips"
 import "./models/Doubt"
+import "./models/Micellaneous"
 import "./Query"
 import "./Mutation"
 export default builder

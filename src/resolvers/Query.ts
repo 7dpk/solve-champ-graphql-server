@@ -198,3 +198,9 @@ builder.queryType({
     }),
   }),
 })
+
+type courseKharidneMePareshani = {
+  phone: string
+  videoId: string
+  whatsAppNo: string
+}

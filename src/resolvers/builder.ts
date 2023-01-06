@@ -5,10 +5,12 @@ import type PrismaTypes from "@pothos/plugin-prisma/generated"
 import ValidationPlugin from "@pothos/plugin-validation"
 // import ErrorsPlugin from "@pothos/plugin-errors"
 import prisma from "../db"
+import { pubsub } from "../pubsub"
 import { DateResolver } from "graphql-scalars"
 import { ZodError, ZodFormattedError } from "zod"
 
 const builder = new SchemaBuilder<{
+  Context: { pubsub: typeof pubsub }
   PrismaTypes: PrismaTypes
   Scalars: {
     Date: { Input: Date; Output: Date }

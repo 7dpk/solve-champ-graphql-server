@@ -24,22 +24,25 @@ model EnrollHistory {
 }
 
 model User {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  uid          String    @unique
-  name         String
-  email        String?   @default("")
-  mobile       String    @unique
-  dob          DateTime? @default(now())
-  gender       String?   @default("")
-  pic_url      String?   @default("https://0x0.st/onc6.jpg")
-  pincode      Int?      @default(0)
-  schoolName   String    @default("")
-  board        String
-  studentClass String
-  pro          Boolean?  @default(false)
-  language     String    @default("Hindi")
-  district     String?   @default("")
-  target       String[]
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  uid           String    @unique
+  name          String
+  email         String?   @default("")
+  mobile        String    @unique
+  dob           DateTime? @default(now())
+  gender        String?   @default("")
+  pic_url       String?   @default("https://0x0.st/onc6.jpg")
+  pincode       Int?      @default(0)
+  schoolName    String    @default("")
+  board         String
+  studentClass  String
+  pro           Boolean?  @default(false)
+  language      String    @default("Hindi")
+  district      String?   @default("")
+  rollCode      String?
+  rollNo        String?
+  isScholarShip Boolean?
+  target        String[]
 
   doubts        Doubt[]
   enrollHistory EnrollHistory[]
@@ -141,4 +144,15 @@ model Doubt {
   date        DateTime? @default(now())
   userId      String
   user        User      @relation(fields: [userId], references: [uid])
+}
+
+model Micellaneous {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  phone          String?
+  whatsAppNumber String?
+  videoId        String?
+  mentorName     String?
+  mentorPhone    String?
+  mentorWhatsApp String?
+  mentorAbout    String?
 }

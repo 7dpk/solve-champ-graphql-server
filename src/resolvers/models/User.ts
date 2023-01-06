@@ -22,6 +22,9 @@ builder.prismaObject("User", {
     language: t.exposeString("language"),
     district: t.exposeString("district", { nullable: true }),
     target: t.exposeStringList("target"),
+    rollCode: t.exposeString("rollCode", { nullable: true }),
+    rollNo: t.exposeString("rollNo", { nullable: true }),
+    isScholarShip: t.exposeBoolean("isScholarShip", { nullable: true }),
     doubt: t.relation("doubts"),
     doubtCount: t.relationCount("doubts"),
     enrollHistory: t.relation("enrollHistory"),
@@ -98,6 +101,9 @@ builder.mutationField("updateUser", (t) =>
       language: t.arg.string(),
       district: t.arg.string(),
       target: t.arg.stringList(),
+      rollCode: t.arg.string(),
+      rollNo: t.arg.string(),
+      isScholarShip: t.arg.boolean(),
     },
 
     resolve: (query, root, args, ctx) => {
@@ -117,6 +123,9 @@ builder.mutationField("updateUser", (t) =>
           language: args.language ?? undefined,
           district: args.district ?? undefined,
           target: args.target ?? undefined,
+          rollCode: args.rollCode ?? undefined,
+          rollNo: args.rollNo ?? undefined,
+          isScholarShip: args.isScholarShip ?? undefined,
         },
       })
       return user
