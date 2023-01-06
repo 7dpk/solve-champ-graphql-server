@@ -24,7 +24,7 @@ builder.prismaObject("User", {
     target: t.exposeStringList("target"),
     rollCode: t.exposeString("rollCode", { nullable: true }),
     rollNo: t.exposeString("rollNo", { nullable: true }),
-    isScholarShip: t.exposeBoolean("isScholarship", { nullable: true }),
+    isScholarship: t.exposeBoolean("isScholarship", { nullable: true }),
     doubt: t.relation("doubts"),
     doubtCount: t.relationCount("doubts"),
     enrollHistory: t.relation("enrollHistory"),
