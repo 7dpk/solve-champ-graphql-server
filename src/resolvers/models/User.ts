@@ -49,7 +49,7 @@ builder.mutationField("createUser", (t) =>
       mobile: t.arg.string({
         required: true,
         validate: {
-          schema: z.string().regex(/^(\d+){10}$/),
+          schema: z.string().regex(/^(\+ \d+){14}$/),
         },
       }),
       dob: t.arg({
