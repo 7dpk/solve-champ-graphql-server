@@ -69,12 +69,12 @@ builder.mutationField("createUser", (t) =>
       studentClass: t.arg.string({ required: true }),
       language: t.arg.string({ required: true }),
       district: t.arg.string(),
-      target: t.arg.stringList({ required: true }),
     },
     resolve: (query, root, args, ctx) =>
       prisma.user.create({
         data: {
           ...args,
+          target: [],
         },
       }),
   })
