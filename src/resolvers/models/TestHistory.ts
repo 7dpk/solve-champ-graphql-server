@@ -19,8 +19,10 @@ builder.mutationField("createTestHistory", (t) =>
     nullable: false,
     args: {
       testId: t.arg.string({ required: true }),
-      userId: t.arg.string({ required: true }),
-      date: t.arg.string(),
+      uid: t.arg.string({ required: true }),
+      date: t.arg({
+        type: "Date",
+      }),
       userResponses: t.arg.intList({ required: true }),
       correctResponses: t.arg.intList({ required: true }),
     },
@@ -38,13 +40,13 @@ builder.queryField("testHistoryBy", (t) =>
     type: ["TestHistory"],
     nullable: true,
     args: {
-      userId: t.arg.string(),
+      uid: t.arg.string(),
       testId: t.arg.string(),
     },
     resolve: (query, root, args, ctx) =>
       prisma.testHistory.findMany({
         where: {
-          userId: args.userId ?? undefined,
+          uid: args.uid ?? undefined,
           testId: args.testId ?? undefined,
         },
       }),

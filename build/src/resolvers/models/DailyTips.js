@@ -30,7 +30,7 @@ builder_1.default.queryField("dailyTips", (t) => t.prismaField({
     resolve: (query, _, args, ctx) => db_1.default.dailyTips.findFirst({
         where: {
             date: {
-                gte: args.date,
+                lte: args.date,
             },
         },
     }),

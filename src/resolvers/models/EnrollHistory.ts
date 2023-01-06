@@ -18,10 +18,12 @@ builder.mutationField("createEnrollHistory", (t) =>
     type: "EnrollHistory",
     nullable: false,
     args: {
-      date: t.arg.string({ required: true }),
+      date: t.arg({
+        type: "Date",
+      }),
       courseName: t.arg.string({ required: true }),
       price: t.arg.string({ required: true }),
-      userId: t.arg.string({ required: true }),
+      uid: t.arg.string({ required: true }),
     },
     resolve: (query, root, args, ctx) =>
       prisma.enrollHistory.create({
@@ -42,7 +44,7 @@ builder.queryField("enrollHistoryBy", (t) =>
     resolve: (query, root, args, ctx) =>
       prisma.enrollHistory.findMany({
         where: {
-          userId: args.uid,
+          uid: args.uid,
         },
       }),
   })

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const builder_1 = __importDefault(require("./builder"));
+require("./Subscription");
 require("./models/User");
 require("./models/Test");
 require("./models/Chapter");
@@ -12,6 +13,8 @@ require("./models/Question");
 require("./models/Rating");
 require("./models/TestHistory");
 require("./models/DailyTips");
+require("./models/Doubt");
+require("./models/Micellaneous");
 require("./Query");
 require("./Mutation");
 exports.default = builder_1.default;

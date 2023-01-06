@@ -23,8 +23,10 @@ builder_1.default.mutationField("createTestHistory", (t) => t.prismaField({
     nullable: false,
     args: {
         testId: t.arg.string({ required: true }),
-        userId: t.arg.string({ required: true }),
-        date: t.arg.string(),
+        uid: t.arg.string({ required: true }),
+        date: t.arg({
+            type: "Date",
+        }),
         userResponses: t.arg.intList({ required: true }),
         correctResponses: t.arg.intList({ required: true }),
     },
@@ -36,14 +38,14 @@ builder_1.default.queryField("testHistoryBy", (t) => t.prismaField({
     type: ["TestHistory"],
     nullable: true,
     args: {
-        userId: t.arg.string(),
+        uid: t.arg.string(),
         testId: t.arg.string(),
     },
     resolve: (query, root, args, ctx) => {
         var _a, _b;
         return db_1.default.testHistory.findMany({
             where: {
-                userId: (_a = args.userId) !== null && _a !== void 0 ? _a : undefined,
+                uid: (_a = args.uid) !== null && _a !== void 0 ? _a : undefined,
                 testId: (_b = args.testId) !== null && _b !== void 0 ? _b : undefined,
             },
         });

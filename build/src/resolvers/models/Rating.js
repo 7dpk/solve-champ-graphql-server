@@ -21,8 +21,11 @@ builder_1.default.mutationField("createRating", (t) => t.prismaField({
     type: "Rating",
     args: {
         testId: t.arg.string({ required: true }),
-        userId: t.arg.string({ required: true }),
+        uid: t.arg.string({ required: true }),
         response: t.arg.float({ required: true }),
+        date: t.arg({
+            type: "Date",
+        }),
     },
     resolve: (query, root, args, ctx) => db_1.default.rating.create({
         data: Object.assign({}, args),
@@ -33,7 +36,7 @@ const UpdateRatingInput = builder_1.default.mutationField("updateRating", (t) =>
     args: {
         id: t.arg.string({ required: true }),
         testId: t.arg.string({ required: true }),
-        userId: t.arg.string({ required: true }),
+        uid: t.arg.string({ required: true }),
         response: t.arg.float({ required: true }),
     },
     resolve: (query, root, args, ctx) => db_1.default.rating.update({

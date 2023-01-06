@@ -73,6 +73,25 @@ builder_1.default.queryType({
             },
             resolve: (query, root, args, ctx) => db_1.default.test.findUniqueOrThrow(Object.assign({ where: { id: args.id } }, query)),
         }),
+        // daily test
+        dailyTest: t.prismaField({
+            type: "Test",
+            nullable: true,
+            args: {
+                date: t.arg({
+                    type: "Date",
+                    required: true,
+                }),
+            },
+            resolve: (query, root, args, ctx) => db_1.default.test.findFirst({
+                where: {
+                    dailyTest: true,
+                    date: {
+                        lte: args.date,
+                    },
+                },
+            }),
+        }),
         allTests: t.prismaField({
             type: ["Test"],
             nullable: true,

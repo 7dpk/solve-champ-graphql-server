@@ -15,12 +15,12 @@ datasource db {
 }
 
 model EnrollHistory {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  date       DateTime @default(now())
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  date       DateTime? @default(now())
   courseName String
   price      String
   uid        String
-  user       User     @relation(fields: [uid], references: [uid])
+  user       User      @relation(fields: [uid], references: [uid])
 }
 
 model User {

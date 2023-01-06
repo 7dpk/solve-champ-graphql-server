@@ -47,7 +47,7 @@ builder.mutationField("createDoubt", (t) =>
     type: "Doubt",
     args: {
       doubtText: t.arg.string({ required: true }),
-      userId: t.arg.string({ required: true }),
+      uid: t.arg.string({ required: true }),
       doubtPic: t.arg.string(),
     },
     resolve: (query, root, args, ctx) =>
@@ -68,7 +68,7 @@ builder.mutationField("updateDoubt", (t) =>
       doubtPic: t.arg.string(),
       solution: t.arg.string(),
       solutionPic: t.arg.string(),
-      userId: t.arg.string(),
+      uid: t.arg.string(),
     },
     resolve: async (query, root, args, ctx) => {
       const doubt = await prisma.doubt.update({
@@ -78,7 +78,7 @@ builder.mutationField("updateDoubt", (t) =>
           doubtPic: args.doubtPic ?? undefined,
           solution: args.solution ?? undefined,
           solutionPic: args.solutionPic ?? undefined,
-          userId: args.userId ?? undefined,
+          uid: args.uid ?? undefined,
         },
       })
       ctx.pubsub.publish("doubt", doubt.id, {
