@@ -4,6 +4,10 @@ const DEFAULT_PAGE_SIZE = 10
 
 builder.queryType({
   fields: (t) => ({
+    // mock
+    greetings: t.string({
+      resolve: () => "Hello World!",
+    }),
     // User
     user: t.prismaField({
       type: "User",
@@ -11,19 +15,26 @@ builder.queryType({
       args: {
         uid: t.arg.string({ required: true }),
       },
-      resolve: (query, root, args, ctx) =>
+      resolve: async (query, root, args, ctx) =>
         prisma.user.findUniqueOrThrow({
-          where: { uid: args.uid },
+          where: {
+            uid: args.uid,
+          },
           ...query,
         }),
     }),
     allUsers: t.prismaField({
       type: ["User"],
       nullable: true,
-
+      args: {
+        take: t.arg.int(),
+        skip: t.arg.int(),
+      },
       resolve: (query, root, args, ctx) =>
         prisma.user.findMany({
           ...query,
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
         }),
     }),
     // test history
@@ -42,10 +53,15 @@ builder.queryType({
     allTestHistory: t.prismaField({
       type: ["TestHistory"],
       nullable: true,
-
+      args: {
+        take: t.arg.int(),
+        skip: t.arg.int(),
+      },
       resolve: (query, root, args, ctx) =>
         prisma.testHistory.findMany({
           ...query,
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
         }),
     }),
     // test history
@@ -64,10 +80,15 @@ builder.queryType({
     allEnrollHistory: t.prismaField({
       type: ["EnrollHistory"],
       nullable: true,
-
+      args: {
+        take: t.arg.int(),
+        skip: t.arg.int(),
+      },
       resolve: (query, root, args, ctx) =>
         prisma.enrollHistory.findMany({
           ...query,
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
         }),
     }),
     // test history
@@ -86,10 +107,15 @@ builder.queryType({
     allQuestions: t.prismaField({
       type: ["Question"],
       nullable: true,
-
+      args: {
+        take: t.arg.int(),
+        skip: t.arg.int(),
+      },
       resolve: (query, root, args, ctx) =>
         prisma.question.findMany({
           ...query,
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
         }),
     }),
 
@@ -117,7 +143,7 @@ builder.queryType({
         }),
       },
       resolve: (query, root, args, ctx) =>
-        prisma.test.findFirst({
+        prisma.test.findFirstOrThrow({
           where: {
             dailyTest: true,
             date: {
@@ -130,9 +156,15 @@ builder.queryType({
     allTests: t.prismaField({
       type: ["Test"],
       nullable: true,
+      args: {
+        take: t.arg.int(),
+        skip: t.arg.int(),
+      },
       resolve: (query, root, args, ctx) =>
         prisma.test.findMany({
           ...query,
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
         }),
     }),
 
@@ -152,10 +184,15 @@ builder.queryType({
     allChapters: t.prismaField({
       type: ["Chapter"],
       nullable: true,
-
+      args: {
+        take: t.arg.int(),
+        skip: t.arg.int(),
+      },
       resolve: (query, root, args, ctx) =>
         prisma.chapter.findMany({
           ...query,
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
         }),
     }),
     getChaptersBy: t.prismaField({
@@ -190,17 +227,16 @@ builder.queryType({
     allRatings: t.prismaField({
       type: ["Rating"],
       nullable: true,
-
+      args: {
+        take: t.arg.int(),
+        skip: t.arg.int(),
+      },
       resolve: (query, root, args, ctx) =>
         prisma.rating.findMany({
           ...query,
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
         }),
     }),
   }),
 })
-
-type courseKharidneMePareshani = {
-  phone: string
-  videoId: string
-  whatsAppNo: string
-}

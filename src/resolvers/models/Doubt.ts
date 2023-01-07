@@ -1,6 +1,6 @@
 import builder from "../builder"
 import prisma from "../../db"
-import { Db, UnorderedBulkOperation } from "mongodb"
+import { GraphQLError } from "graphql"
 import { MutationType } from "../../pubsub"
 builder.prismaObject("Doubt", {
   fields: (t) => ({
@@ -50,12 +50,24 @@ builder.mutationField("createDoubt", (t) =>
       uid: t.arg.string({ required: true }),
       doubtPic: t.arg.string(),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.doubt.create({
+    resolve: async (query, root, args, ctx) => {
+      const doubt = await prisma.doubt.create({
         data: {
           ...args,
         },
-      }),
+      })
+      if (!doubt) {
+        throw new GraphQLError("Can't create doubt", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+
+      return doubt
+    },
   })
 )
 
@@ -81,6 +93,15 @@ builder.mutationField("updateDoubt", (t) =>
           uid: args.uid ?? undefined,
         },
       })
+      if (!doubt) {
+        throw new GraphQLError("Can't update doubt", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       ctx.pubsub.publish("doubt", doubt.id, {
         mutationType: MutationType.UPDATED,
         doubt,

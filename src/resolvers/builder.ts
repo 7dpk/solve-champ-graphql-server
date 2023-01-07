@@ -4,6 +4,7 @@ import type PrismaTypes from "@pothos/plugin-prisma/generated"
 // import WithInputPlugin from "@pothos/plugin-with-input"
 import ValidationPlugin from "@pothos/plugin-validation"
 // import ErrorsPlugin from "@pothos/plugin-errors"
+import MocksPlugin from "@pothos/plugin-mocks"
 import prisma from "../db"
 import { pubsub } from "../pubsub"
 import { DateResolver } from "graphql-scalars"
@@ -17,7 +18,7 @@ const builder = new SchemaBuilder<{
   }
   WithInputArgRequired: false
 }>({
-  plugins: [PrismaPlugin, ValidationPlugin],
+  plugins: [PrismaPlugin, ValidationPlugin, MocksPlugin],
   prisma: {
     client: prisma,
     // defaults to false, uses /// comments from prisma schema as descriptions

@@ -1,5 +1,6 @@
 import builder from "../builder"
 import prisma from "../../db"
+import { GraphQLError } from "graphql"
 builder.prismaObject("TestHistory", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -26,12 +27,23 @@ builder.mutationField("createTestHistory", (t) =>
       userResponses: t.arg.intList({ required: true }),
       correctResponses: t.arg.intList({ required: true }),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.testHistory.create({
+    resolve: async (query, root, args, ctx) => {
+      const testHistory = await prisma.testHistory.create({
         data: {
           ...args,
         },
-      }),
+      })
+      if (!testHistory) {
+        throw new GraphQLError("Can't create test history", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+      return testHistory
+    },
   })
 )
 

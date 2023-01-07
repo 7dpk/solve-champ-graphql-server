@@ -1,6 +1,6 @@
 import builder from "../builder"
 import prisma from "../../db"
-
+import { GraphQLError } from "graphql"
 builder.prismaObject("Chapter", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -30,11 +30,23 @@ builder.mutationField("createChapter", (t) =>
       board: t.arg.string({ required: true }),
       testIds: t.arg.stringList({ required: true }),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.chapter.create({
+    resolve: async (query, root, args, ctx) => {
+      const chapter = await prisma.chapter.create({
         data: {
           ...args,
         },
-      }),
+      })
+      if (!chapter) {
+        throw new GraphQLError("Can't create chapter", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+
+      return chapter
+    },
   })
 )

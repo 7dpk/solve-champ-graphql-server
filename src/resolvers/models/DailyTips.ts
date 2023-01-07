@@ -1,6 +1,7 @@
 import builder from "../builder"
 import prisma from "../../db"
 import { DateTime } from "graphql-scalars/typings/mocks"
+import { GraphQLError } from "graphql"
 builder.prismaObject("DailyTips", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -26,7 +27,7 @@ builder.queryField("dailyTips", (t) =>
       }),
     },
     resolve: (query, _, args, ctx) =>
-      prisma.dailyTips.findFirst({
+      prisma.dailyTips.findFirstOrThrow({
         where: {
           date: {
             lte: args.date,
@@ -53,11 +54,23 @@ builder.mutationField("createDailyTips", (t) =>
       bgcolor: t.arg.string(),
       imgUrl: t.arg.string({ required: true }),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.dailyTips.create({
+    resolve: async (query, root, args, ctx) => {
+      const dailyTips = await prisma.dailyTips.create({
         data: {
           ...args,
         },
-      }),
+      })
+      if (!dailyTips) {
+        throw new GraphQLError("Can't create dailyTips", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+
+      return dailyTips
+    },
   })
 )

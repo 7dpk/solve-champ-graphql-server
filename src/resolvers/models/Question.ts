@@ -1,6 +1,7 @@
 import builder from "../builder"
 import { DLevel } from "../builder"
 import prisma from "../../db"
+import { GraphQLError } from "graphql"
 builder.prismaObject("Question", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -39,12 +40,24 @@ builder.mutationField("createQuestion", (t) =>
       createdBy: t.arg.string({ required: true }),
       difficultyLevel: t.arg({ type: DLevel, required: true }),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.question.create({
+    resolve: async (query, root, args, ctx) => {
+      const question = await prisma.question.create({
         data: {
           ...args,
           testIds: [],
         },
-      }),
+      })
+      if (!question) {
+        throw new GraphQLError("Can't create question", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+
+      return question
+    },
   })
 )

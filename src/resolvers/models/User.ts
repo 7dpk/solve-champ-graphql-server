@@ -1,6 +1,6 @@
 import builder from "../builder"
 import prisma from "../../db"
-import { z } from "zod"
+import { GraphQLError } from "graphql"
 builder.prismaObject("User", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -70,13 +70,25 @@ builder.mutationField("createUser", (t) =>
       language: t.arg.string({ required: true }),
       district: t.arg.string(),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.user.create({
+    resolve: async (query, root, args, ctx) => {
+      const user = await prisma.user.create({
         data: {
           ...args,
           target: [],
         },
-      }),
+      })
+      if (!user) {
+        throw new GraphQLError("Can't create user", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+
+      return user
+    },
   })
 )
 
@@ -127,6 +139,15 @@ builder.mutationField("updateUser", (t) =>
           isScholarship: args.isScholarship ?? undefined,
         },
       })
+      if (!user) {
+        throw new GraphQLError("Can't update user", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       return user
     },
   })
