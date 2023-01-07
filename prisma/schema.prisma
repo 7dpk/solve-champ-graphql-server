@@ -44,10 +44,11 @@ model User {
   isScholarship Boolean?  @default(false)
   target        String[]
 
-  doubts        Doubt[]
-  enrollHistory EnrollHistory[]
-  testHistory   TestHistory[]
-  allRatings    Rating[]
+  doubts             Doubt[]
+  enrollHistory      EnrollHistory[]
+  testHistory        TestHistory[]
+  allRatings         Rating[]
+  CustomNotification CustomNotification[]
 }
 
 model TestHistory {
@@ -155,4 +156,20 @@ model Micellaneous {
   mentorPhone    String?
   mentorWhatsApp String?
   mentorAbout    String?
+}
+
+model Notification {
+  id    String    @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  body  String
+  date  DateTime? @default(now())
+}
+
+model CustomNotification {
+  id    String    @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  body  String
+  date  DateTime? @default(now())
+  uid   String
+  user  User      @relation(fields: [uid], references: [uid])
 }

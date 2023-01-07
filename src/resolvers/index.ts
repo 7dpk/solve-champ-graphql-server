@@ -10,6 +10,7 @@ import "./models/TestHistory"
 import "./models/DailyTips"
 import "./models/Doubt"
 import "./models/Micellaneous"
+import "./models/Notification"
 import "./Query"
 import "./Mutation"
 export default builder

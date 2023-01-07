@@ -32,6 +32,8 @@ builder.prismaObject("User", {
     testHistoryCount: t.relationCount("testHistory"),
     allRatings: t.relation("allRatings"),
     ratingCount: t.relationCount("allRatings"),
+    notification: t.relation("CustomNotification"),
+    notificationCount: t.relationCount("CustomNotification"),
   }),
 })
 
