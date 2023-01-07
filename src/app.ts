@@ -1,8 +1,8 @@
 import { createYoga } from "graphql-yoga"
+import { useResponseCache } from "@graphql-yoga/plugin-response-cache"
 import builder from "./resolvers"
 import { pubsub } from "./pubsub"
 import { GraphQLError } from "graphql"
-import { MaskError } from "graphql-yoga"
 export const yoga = createYoga({
   schema: builder.toSchema(),
   context: () => ({ pubsub }),
@@ -17,4 +17,9 @@ export const yoga = createYoga({
       })
     },
   },
+  plugins: [
+    useResponseCache({
+      session: () => null,
+    }),
+  ],
 })
