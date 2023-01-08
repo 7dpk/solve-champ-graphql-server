@@ -163,6 +163,8 @@ model Notification {
   title String
   body  String
   date  DateTime? @default(now())
+
+  @@index([date])
 }
 
 model CustomNotification {
@@ -172,4 +174,6 @@ model CustomNotification {
   date  DateTime? @default(now())
   uid   String
   user  User      @relation(fields: [uid], references: [uid])
+
+  @@index([date])
 }
