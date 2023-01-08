@@ -33,12 +33,24 @@ builder.queryField("doubtBy", (t) =>
     args: {
       uid: t.arg.string({ required: true }),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.doubt.findMany({
+    resolve: async (query, root, args, ctx) => {
+      const doubts = await prisma.doubt.findMany({
         where: {
           uid: args.uid,
         },
-      }),
+      })
+      console.log(doubts)
+      if (doubts.length == 0) {
+        throw new GraphQLError(`Can't find doubt by ${args.uid}`, {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+      return doubts
+    },
   })
 )
 
