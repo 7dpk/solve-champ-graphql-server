@@ -27,16 +27,16 @@ builder.queryField("allDoubts", (t) =>
   })
 )
 
-builder.queryField("doubt", (t) =>
+builder.queryField("doubtBy", (t) =>
   t.prismaField({
-    type: "Doubt",
+    type: ["Doubt"],
     args: {
-      id: t.arg.string({ required: true }),
+      uid: t.arg.string({ required: true }),
     },
     resolve: (query, root, args, ctx) =>
-      prisma.doubt.findUniqueOrThrow({
+      prisma.doubt.findMany({
         where: {
-          id: args.id,
+          uid: args.uid,
         },
       }),
   })
