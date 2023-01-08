@@ -19,6 +19,7 @@ export const yoga = createYoga({
   },
   plugins: [
     useResponseCache({
+      ttl: 5000,
       session: () => null,
     }),
   ],
