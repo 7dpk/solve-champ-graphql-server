@@ -7,7 +7,7 @@ import ValidationPlugin from "@pothos/plugin-validation"
 import MocksPlugin from "@pothos/plugin-mocks"
 import prisma from "../db"
 import { pubsub } from "../pubsub"
-import { DateResolver } from "graphql-scalars"
+import { DateTimeResolver } from "graphql-scalars"
 import { ZodError, ZodFormattedError } from "zod"
 
 const builder = new SchemaBuilder<{
@@ -36,7 +36,7 @@ const builder = new SchemaBuilder<{
     },
   },
 })
-builder.addScalarType("Date", DateResolver, {})
+builder.addScalarType("Date", DateTimeResolver, {})
 
 export const DLevel = builder.enumType("DifficultyLevel", {
   values: ["EASY", "MEDIUM", "HARD"] as const,
