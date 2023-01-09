@@ -12,6 +12,9 @@ builder.prismaObject("Micellaneous", {
     mentorPhone: t.exposeString("mentorPhone", { nullable: true }),
     mentorWhatsApp: t.exposeString("mentorWhatsApp", { nullable: true }),
     mentorAbout: t.exposeString("mentorAbout", { nullable: true }),
+    mentorPic: t.exposeString("mentorPic", { nullable: true }),
+    mentorHeading: t.exposeString("mentorHeading", { nullable: true }),
+    mentorTitle: t.exposeString("mentorTitle", { nullable: true }),
   }),
 })
 

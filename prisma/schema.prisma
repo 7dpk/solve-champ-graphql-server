@@ -156,10 +156,13 @@ model Micellaneous {
   whatsAppNumber  String?
   videoIdParesani String?
   videoIdUsage    String?
+  mentorTitle     String?
+  mentorPic       String?
   mentorName      String?
   mentorPhone     String?
   mentorWhatsApp  String?
   mentorAbout     String?
+  mentorHeading   String?
   price           String?
 }
 
