@@ -5,7 +5,8 @@ builder.prismaObject("Micellaneous", {
     id: t.exposeID("id"),
     phone: t.exposeString("phone", { nullable: true }),
     whatsAppNumber: t.exposeString("whatsAppNumber", { nullable: true }),
-    videoId: t.exposeString("videoId", { nullable: true }),
+    videoIdParesani: t.exposeString("videoIdParesani", { nullable: true }),
+    videoIdUsage: t.exposeString("videoIdUsage", { nullable: true }),
     mentorName: t.exposeString("mentorName", { nullable: true }),
     mentorPhone: t.exposeString("mentorPhone", { nullable: true }),
     mentorWhatsApp: t.exposeString("mentorWhatsApp", { nullable: true }),
@@ -16,9 +17,10 @@ builder.prismaObject("Micellaneous", {
 builder.queryField("micellaneous", (t) =>
   t.prismaField({
     type: "Micellaneous",
+    nullable: true,
     resolve: async () => {
-      const mic = await prisma.micellaneous.findMany({})
-      return mic[0]
+      const mic = await prisma.micellaneous.findFirstOrThrow()
+      return mic
     },
   })
 )

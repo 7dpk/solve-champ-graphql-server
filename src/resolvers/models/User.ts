@@ -25,8 +25,15 @@ builder.prismaObject("User", {
     rollCode: t.exposeString("rollCode", { nullable: true }),
     rollNo: t.exposeString("rollNo", { nullable: true }),
     isScholarship: t.exposeBoolean("isScholarship", { nullable: true }),
+    query: t.relation("Inquiry"),
+    queryCount: t.relationCount("Inquiry"),
     doubt: t.relation("doubts"),
     doubtCount: t.relationCount("doubts"),
+    resolvedDoubts: t.relationCount("doubts", {
+      where: {
+        resolved: true,
+      },
+    }),
     enrollHistory: t.relation("enrollHistory"),
     testHistory: t.relation("testHistory"),
     testHistoryCount: t.relationCount("testHistory"),
@@ -151,6 +158,59 @@ builder.mutationField("updateUser", (t) =>
         })
       }
       return user
+    },
+  })
+)
+
+// USER query
+builder.prismaObject("Inquiry", {
+  fields: (t) => ({
+    id: t.exposeString("id"),
+    text: t.exposeString("text"),
+    user: t.relation("user"),
+  }),
+})
+builder.mutationField("createQuery", (t) =>
+  t.prismaField({
+    type: "Inquiry",
+    args: {
+      text: t.arg.string({ required: true }),
+      uid: t.arg.string({ required: true }),
+    },
+    resolve: async (query, parent, args, ctx) => {
+      const qn = (
+        await prisma.user
+          .findUniqueOrThrow({
+            where: {
+              uid: args.uid,
+            },
+          })
+          .Inquiry()
+      )?.length
+      if (qn > 4) {
+        throw new GraphQLError("Can't create any more queries", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+      const q = await prisma.inquiry.create({
+        data: {
+          ...args,
+        },
+      })
+      if (!q) {
+        throw new GraphQLError("Can't create query", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+      return q
     },
   })
 )

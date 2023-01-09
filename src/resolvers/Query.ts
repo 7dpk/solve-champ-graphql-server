@@ -128,8 +128,8 @@ builder.queryType({
       },
       resolve: (query, root, args, ctx) =>
         prisma.test.findUniqueOrThrow({
-          where: { id: args.id },
           ...query,
+          where: { id: args.id },
         }),
     }),
     // daily test
@@ -177,8 +177,8 @@ builder.queryType({
       },
       resolve: (query, root, args, ctx) =>
         prisma.chapter.findUniqueOrThrow({
-          where: { id: args.id },
           ...query,
+          where: { id: args.id },
         }),
     }),
     allChapters: t.prismaField({
@@ -190,9 +190,9 @@ builder.queryType({
       },
       resolve: (query, root, args, ctx) =>
         prisma.chapter.findMany({
+          // take: args.take ?? DEFAULT_PAGE_SIZE,
+          // skip: args.skip ?? 0,
           ...query,
-          take: args.take ?? DEFAULT_PAGE_SIZE,
-          skip: args.skip ?? 0,
         }),
     }),
     getChaptersBy: t.prismaField({

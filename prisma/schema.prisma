@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator prisma {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["filteredRelationCount"]
 }
 
 generator pothos {
@@ -49,6 +50,7 @@ model User {
   testHistory        TestHistory[]
   allRatings         Rating[]
   CustomNotification CustomNotification[]
+  Inquiry            Inquiry[]
 }
 
 model TestHistory {
@@ -96,9 +98,9 @@ model Test {
   totalMarks   Int           @default(100)
   paid         Boolean       @default(false)
   passingMarks Int           @default(40)
-  chapterId    String        @db.ObjectId
   dailyTest    Boolean?      @default(false)
   date         DateTime?     @default(now())
+  chapterId    String        @db.ObjectId
   chapter      Chapter       @relation(fields: [chapterId], references: [id])
   questionIds  String[]      @db.ObjectId
   questions    Question[]    @relation(fields: [questionIds], references: [id])
@@ -143,19 +145,22 @@ model Doubt {
   solution    String?
   solutionPic String?
   date        DateTime? @default(now())
+  resolved    Boolean?  @default(false)
   uid         String
   user        User      @relation(fields: [uid], references: [uid])
 }
 
 model Micellaneous {
-  id             String  @id @default(auto()) @map("_id") @db.ObjectId
-  phone          String?
-  whatsAppNumber String?
-  videoId        String?
-  mentorName     String?
-  mentorPhone    String?
-  mentorWhatsApp String?
-  mentorAbout    String?
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  phone           String?
+  whatsAppNumber  String?
+  videoIdParesani String?
+  videoIdUsage    String?
+  mentorName      String?
+  mentorPhone     String?
+  mentorWhatsApp  String?
+  mentorAbout     String?
+  price           String?
 }
 
 model Notification {
@@ -176,4 +181,11 @@ model CustomNotification {
   user  User      @relation(fields: [uid], references: [uid])
 
   @@index([date])
+}
+
+model Inquiry {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  text String
+  uid  String
+  user User   @relation(fields: [uid], references: [uid])
 }
