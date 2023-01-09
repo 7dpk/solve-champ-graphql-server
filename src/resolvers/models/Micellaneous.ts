@@ -7,6 +7,7 @@ builder.prismaObject("Micellaneous", {
     whatsAppNumber: t.exposeString("whatsAppNumber", { nullable: true }),
     videoIdParesani: t.exposeString("videoIdParesani", { nullable: true }),
     videoIdUsage: t.exposeString("videoIdUsage", { nullable: true }),
+    price: t.exposeString("price", { nullable: true }),
     mentorName: t.exposeString("mentorName", { nullable: true }),
     mentorPhone: t.exposeString("mentorPhone", { nullable: true }),
     mentorWhatsApp: t.exposeString("mentorWhatsApp", { nullable: true }),
