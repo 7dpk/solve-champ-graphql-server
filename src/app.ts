@@ -4,9 +4,12 @@ import builder from "./resolvers"
 import { pubsub } from "./pubsub"
 import { GraphQLError } from "graphql"
 import { createVerifier } from "fast-jwt"
+// import {default as Redis} from 'ioredis'
 import * as dotenv from "dotenv"
 import prisma from "./db"
 dotenv.config()
+
+// const redis = new Redis()
 
 const verifySync = createVerifier({ key: process.env.JWT_SECRET })
 export const yoga = createYoga<{ uid: string; th: string[] }>({

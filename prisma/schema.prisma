@@ -165,6 +165,9 @@ model Micellaneous {
   mentorHeading    String?
   price            String?
   upiPic           String?
+  upiId            String?
+  upiUrl           String?
+  paymentNo2       String?
   paymentRefNumber String?
 }
 
