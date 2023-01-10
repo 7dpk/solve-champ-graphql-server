@@ -1,29 +1,25 @@
 import { readFileSync } from "fs"
 import { MongoClient, ObjectId } from "mongodb"
 import { QuestionFromSheet, T, Q, C } from "./interfaces"
-import * as dotenv from "dotenv"
+// import * as dotenv from "dotenv"
 
-<<<<<<< HEAD
-dotenv.config()
-const cstring = process.env.DATABASE_URL
-=======
-const cstring = ""
->>>>>>> 7caa5d53fc7d4a53717c6587fa385a65ac7177d4
-const dbname = "studyChamptest"
-const data = readFileSync("./question.json")
-let Sheet1: QuestionFromSheet[] = JSON.parse(data.toString())["Sheet1"]
-let testnames = new Set<string>()
-Sheet1.forEach((q) => testnames.add(q["testname"]))
-let tests = Array.from(testnames)
-console.log(tests)
-
-const m = new MongoClient(cstring)
+// const dbname = "studyChamptest"
+// const data = readFileSync("./question.json")
+// let Sheet1: QuestionFromSheet[] = JSON.parse(data.toString())["Sheet1"]
+// let testnames = new Set<string>()
+// Sheet1.forEach((q) => testnames.add(q["testname"]))
+// let tests = Array.from(testnames)
+// console.log(tests)
+const tests = ["Test 1"]
+const m = new MongoClient(
+  "mongodb+srv://deepak:ydVhFyWwIV4rkNOb@s.5x4dc.mongodb.net/studyChamptest"
+)
 
 const chapter: Partial<C> = {
-  name: "सामाजिक विज्ञान प्रश्नोत्तरी",
-  class: "10",
-  subject: "सामाजिक विज्ञान",
-  board: "बिहार बोर्ड",
+  name: "Martha",
+  class: "X",
+  subject: "ENGLISH",
+  board: "BSEB",
   testIds: [],
 }
 
@@ -37,18 +33,18 @@ let test: Partial<T> = {
   rating: 3.0,
   testClass: "10",
   board: "Bihar Board",
-  subject: "SSCIENCE",
+  subject: chapter.subject,
   totalMarks: 100,
   passingMarks: 40,
   dailyTest: false,
   date: new Date(),
   questionIds: [],
 }
-
 var question: Partial<Q> = {}
+
 const main = async () => {
   await m.connect()
-  const db = m.db(dbname)
+  const db = m.db("studyChamptest")
   const chapterColl = db.collection("Chapter")
   // 1 INSERT CHAPTER
   let interResult = await chapterColl.insertOne(chapter)
@@ -61,6 +57,7 @@ const main = async () => {
       ...test,
       name: tests[i],
       chapterId: new ObjectId(chapterId),
+      paid: true,
     })
     let tid = interResult.insertedId.toHexString()
     await chapterColl.updateOne(
@@ -71,28 +68,28 @@ const main = async () => {
   }
 
   // 3 INSERT QUESTIONS
-  let questionColl = db.collection("Question")
-  for (let i = 0; i < Sheet1.length; ++i) {
-    question.chapter = ["सामाजिक विज्ञान"]
-    question.options = Sheet1[i].options.split("@").map((i) => i.trim())
-    question.details = Sheet1[i].Question
-    question.correctOption = Sheet1[i].correctoption - 1
-    question.explanation = ""
-    question.image = ""
-    question.tags = []
-    question.subject = chapter.subject
-    question.questionClass = chapter.class
-    question.createdBy = "8XAqyhLXApaJz6kHznuBapMJtYP20"
-    question.difficultyLevel = Sheet1[i].difficultylevel
-    question.testIds = []
-    let interResult = await questionColl.insertOne({ ...question })
-    let qid = interResult.insertedId.toHexString()
-    await testColl.updateOne(
-      { name: Sheet1[i].testname },
-      { $push: { questionIds: new ObjectId(qid) } }
-    )
-    console.log("Inserted Question => " + (i + 1))
-  }
+  // let questionColl = db.collection("Question")
+  // for (let i = 0; i < Sheet1.length; ++i) {
+  //   question.chapter = ["सामाजिक विज्ञान"]
+  //   question.options = Sheet1[i].options.split("@").map((i) => i.trim())
+  //   question.details = Sheet1[i].Question
+  //   question.correctOption = Sheet1[i].correctoption - 1
+  //   question.explanation = ""
+  //   question.image = ""
+  //   question.tags = []
+  //   question.subject = chapter.subject
+  //   question.questionClass = chapter.class
+  //   question.createdBy = "8XAqyhLXApaJz6kHznuBapMJtYP20"
+  //   question.difficultyLevel = Sheet1[i].difficultylevel
+  //   question.testIds = []
+  //   let interResult = await questionColl.insertOne({ ...question })
+  //   let qid = interResult.insertedId.toHexString()
+  //   await testColl.updateOne(
+  //     { name: Sheet1[i].testname },
+  //     { $push: { questionIds: new ObjectId(qid) } }
+  //   )
+  //   console.log("Inserted Question => " + (i + 1))
+  // }
   m.close()
 }
 main()

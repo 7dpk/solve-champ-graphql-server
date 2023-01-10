@@ -88,26 +88,26 @@ builder.mutationField("createTest", (t) =>
   })
 )
 
-builder.mutationField("insertQuestion", (t) =>
-  t.prismaField({
-    type: "Test",
-    args: {
-      name: t.arg.string({ required: true }),
-      questionId: t.arg.string({ required: true }),
-    },
-    resolve: (query, _, args, ctx) =>
-      prisma.test.update({
-        where: {
-          name: args.name,
-        },
-        data: {
-          questionIds: {
-            push: args.questionId,
-          },
-        },
-      }),
-  })
-)
+// builder.mutationField("insertQuestion", (t) =>
+//   t.prismaField({
+//     type: "Test",
+//     args: {
+//       name: t.arg.string({ required: true }),
+//       questionId: t.arg.string({ required: true }),
+//     },
+//     resolve: (query, _, args, ctx) =>
+//       prisma.test.update({
+//         where: {
+//           name: args.name,
+//         },
+//         data: {
+//           questionIds: {
+//             push: args.questionId,
+//           },
+//         },
+//       }),
+//   })
+// )
 
 // builder.queryField("User", (t) =>
 //   t.prismaField({

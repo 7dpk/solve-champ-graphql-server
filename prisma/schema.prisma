@@ -89,7 +89,7 @@ model Question {
 
 model Test {
   id           String        @id @default(auto()) @map("_id") @db.ObjectId
-  name         String        @unique
+  name         String
   instructions String[]      @default(["एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।", "एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।", "एक प्रकार का नमूना किताब बनाने के लिए इसे तले हुए।"])
   rating       Float?        @default(3.0)
   testClass    String
@@ -151,19 +151,21 @@ model Doubt {
 }
 
 model Micellaneous {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  phone           String?
-  whatsAppNumber  String?
-  videoIdParesani String?
-  videoIdUsage    String?
-  mentorTitle     String?
-  mentorPic       String?
-  mentorName      String?
-  mentorPhone     String?
-  mentorWhatsApp  String?
-  mentorAbout     String?
-  mentorHeading   String?
-  price           String?
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  phone            String?
+  whatsAppNumber   String?
+  videoIdParesani  String?
+  videoIdUsage     String?
+  mentorTitle      String?
+  mentorPic        String?
+  mentorName       String?
+  mentorPhone      String?
+  mentorWhatsApp   String?
+  mentorAbout      String?
+  mentorHeading    String?
+  price            String?
+  upiPic           String?
+  paymentRefNumber String?
 }
 
 model Notification {

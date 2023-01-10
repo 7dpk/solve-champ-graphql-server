@@ -1,6 +1,7 @@
 import builder from "../builder"
 import prisma from "../../db"
 import { GraphQLError } from "graphql"
+
 builder.prismaObject("Chapter", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -16,6 +17,9 @@ builder.prismaObject("Chapter", {
         paid: false,
       },
     }),
+    // attemptedTestCount: t.int({
+    //   resolve: (chapter, args, ctx) => (chapter.testIds.filter(i=>a.includes(i))).length
+    // })
   }),
 })
 

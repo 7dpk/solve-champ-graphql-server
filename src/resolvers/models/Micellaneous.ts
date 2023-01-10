@@ -15,6 +15,8 @@ builder.prismaObject("Micellaneous", {
     mentorPic: t.exposeString("mentorPic", { nullable: true }),
     mentorHeading: t.exposeString("mentorHeading", { nullable: true }),
     mentorTitle: t.exposeString("mentorTitle", { nullable: true }),
+    upiPic: t.exposeString("upiPic", { nullable: true }),
+    paymentRefNumber: t.exposeString("paymentRefNumber", { nullable: true }),
   }),
 })
 

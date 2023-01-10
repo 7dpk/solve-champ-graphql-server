@@ -9,6 +9,7 @@ builder.prismaObject("Doubt", {
     doubtPic: t.exposeString("doubtPic", { nullable: true }),
     solution: t.exposeString("solution", { nullable: true }),
     solutionPic: t.exposeString("solutionPic", { nullable: true }),
+    resolved: t.exposeBoolean("resolved", { nullable: true }),
     user: t.relation("user"),
     date: t.expose("date", {
       type: "Date",
@@ -92,6 +93,7 @@ builder.mutationField("updateDoubt", (t) =>
       doubtPic: t.arg.string(),
       solution: t.arg.string(),
       solutionPic: t.arg.string(),
+      resolved: t.arg.boolean(),
       uid: t.arg.string(),
     },
     resolve: async (query, root, args, ctx) => {
