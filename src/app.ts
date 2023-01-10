@@ -1,18 +1,23 @@
 import { createYoga } from "graphql-yoga"
 import { useResponseCache } from "@graphql-yoga/plugin-response-cache"
 import builder from "./resolvers"
-import { pubsub } from "./pubsub"
+import { PubSub } from "graphql-yoga"
+import { pubsub, PuSubEvents } from "./pubsub"
 import { GraphQLError } from "graphql"
 import { createVerifier } from "fast-jwt"
-// import {default as Redis} from 'ioredis'
 import * as dotenv from "dotenv"
 import prisma from "./db"
 dotenv.config()
 
-// const redis = new Redis()
+// const redis = new Redis("redis://default:redispw@localhost:49153")
+// import { default as Redis } from "ioredis"
 
 const verifySync = createVerifier({ key: process.env.JWT_SECRET })
-export const yoga = createYoga<{ uid: string; th: string[] }>({
+export const yoga = createYoga<{
+  uid: string
+  th: string[]
+  pubsub: PubSub<PuSubEvents>
+}>({
   schema: builder.toSchema(),
   context: async ({ request }) => {
     try {
@@ -27,9 +32,20 @@ export const yoga = createYoga<{ uid: string; th: string[] }>({
         })
       }
       const { uid } = verifySync(token)
-      const th = await prisma.testHistory.findMany({ where: { uid: uid } })
-      console.log(uid, th)
-      return { uid, th, pubsub }
+      // let f = await redis.exists(uid)
+      // if (f) {
+      //   var th = (await redis.get(uid)) ?? []
+      //   // console.log(th)
+      //   return { uid, th }
+      // } else {
+      //   var t = (
+      //     await prisma.testHistory.findMany({ where: { uid: uid } })
+      //   ).map((i) => i.testId)
+
+      //   await redis.set(uid, JSON.stringify(t))
+      //   console.log(t)
+      // return { uid, th: t, pubsub }
+      return { uid, pubsub }
     } catch (e) {
       throw new GraphQLError(`${e}`, {
         extensions: {
@@ -42,7 +58,7 @@ export const yoga = createYoga<{ uid: string; th: string[] }>({
   },
   maskedErrors: {
     maskError: (err, message) => {
-      return new GraphQLError(`Error: ${err} Message: ${message}`, {
+      return new GraphQLError(`${err} ${message}`, {
         extensions: {
           http: {
             status: 400,

@@ -55,12 +55,22 @@ builder.queryField("testHistoryBy", (t) =>
       uid: t.arg.string(),
       testId: t.arg.string(),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.testHistory.findMany({
+    resolve: (query, root, args, ctx) => {
+      if (ctx.uid !== process.env.ADMIN_ID) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+      return prisma.testHistory.findMany({
         where: {
           uid: args.uid ?? undefined,
           testId: args.testId ?? undefined,
         },
-      }),
+      })
+    },
   })
 )

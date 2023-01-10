@@ -41,6 +41,15 @@ builder.mutationField("createQuestion", (t) =>
       difficultyLevel: t.arg({ type: DLevel, required: true }),
     },
     resolve: async (query, root, args, ctx) => {
+      if (ctx.uid !== process.env.ADMIN_ID) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const question = await prisma.question.create({
         data: {
           ...args,

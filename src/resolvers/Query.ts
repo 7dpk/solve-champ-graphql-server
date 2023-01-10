@@ -1,5 +1,6 @@
 import builder from "./builder"
 import prisma from "../db"
+import { GraphQLError } from "graphql"
 const DEFAULT_PAGE_SIZE = 10
 
 builder.queryType({
@@ -15,13 +16,23 @@ builder.queryType({
       args: {
         uid: t.arg.string({ required: true }),
       },
-      resolve: async (query, root, args, ctx) =>
-        prisma.user.findUniqueOrThrow({
+      resolve: async (query, root, args, ctx) => {
+        if (ctx.uid !== args.uid) {
+          throw new GraphQLError("Not Authorized", {
+            extensions: {
+              http: {
+                status: 400,
+              },
+            },
+          })
+        }
+        return prisma.user.findUniqueOrThrow({
           where: {
             uid: args.uid,
           },
           ...query,
-        }),
+        })
+      },
     }),
     allUsers: t.prismaField({
       type: ["User"],
@@ -30,12 +41,22 @@ builder.queryType({
         take: t.arg.int(),
         skip: t.arg.int(),
       },
-      resolve: (query, root, args, ctx) =>
-        prisma.user.findMany({
+      resolve: (query, root, args, ctx) => {
+        if (ctx.uid !== process.env.ADMIN_ID) {
+          throw new GraphQLError("Not Authorized", {
+            extensions: {
+              http: {
+                status: 400,
+              },
+            },
+          })
+        }
+        return prisma.user.findMany({
           ...query,
           take: args.take ?? DEFAULT_PAGE_SIZE,
           skip: args.skip ?? 0,
-        }),
+        })
+      },
     }),
     // test history
     testHistory: t.prismaField({
@@ -57,12 +78,22 @@ builder.queryType({
         take: t.arg.int(),
         skip: t.arg.int(),
       },
-      resolve: (query, root, args, ctx) =>
-        prisma.testHistory.findMany({
+      resolve: (query, root, args, ctx) => {
+        if (ctx.uid !== process.env.ADMIN_ID) {
+          throw new GraphQLError("Not Authorized", {
+            extensions: {
+              http: {
+                status: 400,
+              },
+            },
+          })
+        }
+        return prisma.testHistory.findMany({
           ...query,
           take: args.take ?? DEFAULT_PAGE_SIZE,
           skip: args.skip ?? 0,
-        }),
+        })
+      },
     }),
     // test history
     enrollHistory: t.prismaField({
@@ -84,12 +115,22 @@ builder.queryType({
         take: t.arg.int(),
         skip: t.arg.int(),
       },
-      resolve: (query, root, args, ctx) =>
-        prisma.enrollHistory.findMany({
+      resolve: (query, root, args, ctx) => {
+        if (ctx.uid !== process.env.ADMIN_ID) {
+          throw new GraphQLError("Not Authorized", {
+            extensions: {
+              http: {
+                status: 400,
+              },
+            },
+          })
+        }
+        return prisma.enrollHistory.findMany({
           ...query,
           take: args.take ?? DEFAULT_PAGE_SIZE,
           skip: args.skip ?? 0,
-        }),
+        })
+      },
     }),
     // test history
     question: t.prismaField({
@@ -111,12 +152,22 @@ builder.queryType({
         take: t.arg.int(),
         skip: t.arg.int(),
       },
-      resolve: (query, root, args, ctx) =>
-        prisma.question.findMany({
+      resolve: (query, root, args, ctx) => {
+        if (ctx.uid !== process.env.ADMIN_ID) {
+          throw new GraphQLError("Not Authorized", {
+            extensions: {
+              http: {
+                status: 400,
+              },
+            },
+          })
+        }
+        return prisma.question.findMany({
           ...query,
           take: args.take ?? DEFAULT_PAGE_SIZE,
           skip: args.skip ?? 0,
-        }),
+        })
+      },
     }),
 
     // test history
@@ -126,11 +177,12 @@ builder.queryType({
       args: {
         id: t.arg.string({ required: true }),
       },
-      resolve: (query, root, args, ctx) =>
-        prisma.test.findUniqueOrThrow({
+      resolve: (query, root, args, ctx) => {
+        return prisma.test.findUniqueOrThrow({
           ...query,
           where: { id: args.id },
-        }),
+        })
+      },
     }),
     // daily test
     dailyTest: t.prismaField({
@@ -160,12 +212,22 @@ builder.queryType({
         take: t.arg.int(),
         skip: t.arg.int(),
       },
-      resolve: (query, root, args, ctx) =>
-        prisma.test.findMany({
+      resolve: (query, root, args, ctx) => {
+        if (ctx.uid !== process.env.ADMIN_ID) {
+          throw new GraphQLError("Not Authorized", {
+            extensions: {
+              http: {
+                status: 400,
+              },
+            },
+          })
+        }
+        return prisma.test.findMany({
           ...query,
           take: args.take ?? DEFAULT_PAGE_SIZE,
           skip: args.skip ?? 0,
-        }),
+        })
+      },
     }),
 
     // test history
@@ -188,12 +250,22 @@ builder.queryType({
         take: t.arg.int(),
         skip: t.arg.int(),
       },
-      resolve: (query, root, args, ctx) =>
-        prisma.chapter.findMany({
-          // take: args.take ?? DEFAULT_PAGE_SIZE,
-          // skip: args.skip ?? 0,
+      resolve: (query, root, args, ctx) => {
+        if (ctx.uid !== process.env.ADMIN_ID) {
+          throw new GraphQLError("Not Authorized", {
+            extensions: {
+              http: {
+                status: 400,
+              },
+            },
+          })
+        }
+        return prisma.chapter.findMany({
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
           ...query,
-        }),
+        })
+      },
     }),
     getChaptersBy: t.prismaField({
       type: ["Chapter"],

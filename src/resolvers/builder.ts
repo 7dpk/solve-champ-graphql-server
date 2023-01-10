@@ -11,7 +11,7 @@ import { DateTimeResolver } from "graphql-scalars"
 import { ZodError, ZodFormattedError } from "zod"
 
 const builder = new SchemaBuilder<{
-  Context: { pubsub: typeof pubsub }
+  Context: { pubsub: typeof pubsub; uid: string; th: string[] }
   PrismaTypes: PrismaTypes
   Scalars: {
     Date: { Input: Date; Output: Date }

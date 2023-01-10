@@ -27,6 +27,15 @@ builder.mutationField("createEnrollHistory", (t) =>
       uid: t.arg.string({ required: true }),
     },
     resolve: async (query, root, args, ctx) => {
+      if (ctx.uid !== args.uid) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const enrollHistory = await prisma.enrollHistory.create({
         data: {
           ...args,

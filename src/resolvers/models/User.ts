@@ -80,6 +80,15 @@ builder.mutationField("createUser", (t) =>
       district: t.arg.string(),
     },
     resolve: async (query, root, args, ctx) => {
+      if (ctx.uid !== args.uid) {
+        throw new GraphQLError("Imposter Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const user = await prisma.user.create({
         data: {
           ...args,
@@ -128,6 +137,15 @@ builder.mutationField("updateUser", (t) =>
     },
 
     resolve: (query, root, args, ctx) => {
+      if (ctx.uid !== args.uid) {
+        throw new GraphQLError("Imposter Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const user = prisma.user.update({
         where: { uid: args.uid },
         data: {
@@ -179,6 +197,15 @@ builder.mutationField("createQuery", (t) =>
       uid: t.arg.string({ required: true }),
     },
     resolve: async (query, parent, args, ctx) => {
+      if (ctx.uid !== args.uid) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const qn = (
         await prisma.user
           .findUniqueOrThrow({

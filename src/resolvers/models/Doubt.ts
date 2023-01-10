@@ -21,10 +21,20 @@ builder.prismaObject("Doubt", {
 builder.queryField("allDoubts", (t) =>
   t.prismaField({
     type: ["Doubt"],
-    resolve: (query, root, args, ctx) =>
-      prisma.doubt.findMany({
+    resolve: (query, root, args, ctx) => {
+      if (ctx.uid !== process.env.ADMIN_ID) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+      return prisma.doubt.findMany({
         ...query,
-      }),
+      })
+    },
   })
 )
 
@@ -35,6 +45,15 @@ builder.queryField("doubtBy", (t) =>
       uid: t.arg.string({ required: true }),
     },
     resolve: async (query, root, args, ctx) => {
+      if (ctx.uid !== args.uid) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const doubts = await prisma.doubt.findMany({
         where: {
           uid: args.uid,
@@ -64,6 +83,15 @@ builder.mutationField("createDoubt", (t) =>
       doubtPic: t.arg.string(),
     },
     resolve: async (query, root, args, ctx) => {
+      if (ctx.uid !== args.uid) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const doubt = await prisma.doubt.create({
         data: {
           ...args,

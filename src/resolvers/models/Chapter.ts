@@ -18,11 +18,14 @@ builder.prismaObject("Chapter", {
       },
     }),
     // attemptedTestCount: t.int({
-    //   resolve: (chapter, args, ctx) => (chapter.testIds.filter(i=>a.includes(i))).length
-    // })
+    //   resolve: (chapter, args, ctx) =>
+    //     chapter.testIds.filter((i) => ctx.th.includes(i)).length,
+    // }),
   }),
 })
-
+// resolve: (chapter, args, ctx) =>
+//         chapter.testIds.filter((i) => ctx.th.includes(i)).length,
+//     }),
 builder.mutationField("createChapter", (t) =>
   t.prismaField({
     type: "Chapter",
@@ -35,6 +38,15 @@ builder.mutationField("createChapter", (t) =>
       testIds: t.arg.stringList({ required: true }),
     },
     resolve: async (query, root, args, ctx) => {
+      if (ctx.uid !== process.env.ADMIN_ID) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const chapter = await prisma.chapter.create({
         data: {
           ...args,

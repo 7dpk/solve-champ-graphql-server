@@ -68,6 +68,15 @@ builder.mutationField("createTest", (t) =>
       }),
     },
     resolve: async (query, root, args, ctx) => {
+      if (ctx.uid !== process.env.ADMIN_ID) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const test = await prisma.test.create({
         data: {
           ...args,

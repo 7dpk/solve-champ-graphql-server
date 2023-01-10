@@ -55,6 +55,15 @@ builder.mutationField("createDailyTips", (t) =>
       imgUrl: t.arg.string({ required: true }),
     },
     resolve: async (query, root, args, ctx) => {
+      if (ctx.uid !== process.env.ADMIN_ID) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
       const dailyTips = await prisma.dailyTips.create({
         data: {
           ...args,

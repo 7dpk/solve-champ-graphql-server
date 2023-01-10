@@ -1,5 +1,6 @@
 import builder from "../builder"
 import prisma from "../../db"
+import { GraphQLError } from "graphql"
 builder.prismaObject("Notification", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -48,15 +49,25 @@ builder.queryField("notificationBy", (t) =>
       take: t.arg.int(),
       skip: t.arg.int(),
     },
-    resolve: (query, parent, arg, ctx) =>
-      prisma.customNotification.findMany({
+    resolve: (query, parent, arg, ctx) => {
+      if (ctx.uid !== arg.uid) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+      return prisma.customNotification.findMany({
         where: {
           uid: arg.uid,
         },
         ...query,
         take: arg.take ?? 10,
         skip: arg.skip ?? 0,
-      }),
+      })
+    },
   })
 )
 
@@ -83,11 +94,21 @@ builder.mutationField("createCustomNotification", (t) =>
       body: t.arg.string({ required: true }),
       uid: t.arg.string({ required: true }),
     },
-    resolve: (query, root, args, ctx) =>
-      prisma.customNotification.create({
+    resolve: (query, root, args, ctx) => {
+      if (ctx.uid !== process.env.ADMIN_ID) {
+        throw new GraphQLError("Not Authorized", {
+          extensions: {
+            http: {
+              status: 400,
+            },
+          },
+        })
+      }
+      return prisma.customNotification.create({
         data: {
           ...args,
         },
-      }),
+      })
+    },
   })
 )
