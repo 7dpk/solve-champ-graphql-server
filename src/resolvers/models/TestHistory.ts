@@ -56,7 +56,7 @@ builder.queryField("testHistoryBy", (t) =>
       testId: t.arg.string(),
     },
     resolve: (query, root, args, ctx) => {
-      if (ctx.uid !== process.env.ADMIN_ID) {
+      if (ctx.uid !== args.uid) {
         throw new GraphQLError("Not Authorized", {
           extensions: {
             http: {
