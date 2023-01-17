@@ -109,14 +109,15 @@ model Test {
 }
 
 model Chapter {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  logo    String?  @default("https://0x0.st/oncE.jpg")
-  class   String
-  subject String
-  board   String
-  testIds String[] @db.ObjectId
-  tests   Test[]
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  logo          String?  @default("https://0x0.st/oncE.jpg")
+  class         String
+  subject       String
+  board         String
+  freeTestCount Int      @default(1)
+  testIds       String[] @db.ObjectId
+  tests         Test[]
 }
 
 model Rating {

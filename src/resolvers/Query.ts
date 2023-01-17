@@ -276,11 +276,11 @@ builder.queryType({
         subject: t.arg.string({ required: true }),
       },
       resolve: (query, root, args, ctx) =>
-        prisma.chapter.findMany({
+      prisma.chapter.findMany({
+          ...query,
           where: {
             ...args,
           },
-          ...query,
         }),
     }),
     // test history
