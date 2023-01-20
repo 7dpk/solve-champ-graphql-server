@@ -106,6 +106,7 @@ model Test {
   questions    Question[]    @relation(fields: [questionIds], references: [id])
   testHistory  TestHistory[]
   allRatings   Rating[]
+  @@index(fields: [date(sort: Desc)]) 
 }
 
 model Chapter {
