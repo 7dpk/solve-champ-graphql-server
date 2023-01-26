@@ -12,11 +12,11 @@ builder.prismaObject("Chapter", {
     board: t.exposeString("board"),
     testCount: t.relationCount("tests"),
     tests: t.relation("tests"),
-    freeTestCount: t.exposeInt("freeTestCount")
-    // attemptedTestCount: t.int({
-    //   resolve: (chapter, args, ctx) =>
-    //     chapter.testIds.filter((i) => ctx.th.includes(i)).length,
-    // }),
+    freeTestCount: t.exposeInt("freeTestCount"),
+    attemptedTestCount: t.int({
+      resolve: (chapter, args, ctx) =>
+        chapter.testIds.filter((i) => ctx.th.includes(i)).length,
+    }),
   }),
 })
 // resolve: (chapter, args, ctx) =>

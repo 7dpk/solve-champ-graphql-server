@@ -1,6 +1,7 @@
 import builder from "../builder"
 import prisma from "../../db"
 import { GraphQLError } from "graphql"
+import { redis } from '../../app'
 builder.prismaObject("TestHistory", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -42,6 +43,7 @@ builder.mutationField("createTestHistory", (t) =>
           },
         })
       }
+      await redis.del(args.uid)
       return testHistory
     },
   })

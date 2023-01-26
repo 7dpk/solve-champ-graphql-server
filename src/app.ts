@@ -9,8 +9,8 @@ import * as dotenv from "dotenv"
 import prisma from "./db"
 dotenv.config()
 
-// const redis = new Redis("redis://default:redispw@localhost:49153")
-// import { default as Redis } from "ioredis"
+import { default as Redis } from "ioredis"
+export const redis = new Redis()
 
 const verifySync = createVerifier({ key: process.env.JWT_SECRET })
 export const yoga = createYoga<{
@@ -32,20 +32,20 @@ export const yoga = createYoga<{
         })
       }
       const { uid } = verifySync(token)
-      // let f = await redis.exists(uid)
-      // if (f) {
-      //   var th = (await redis.get(uid)) ?? []
-      //   // console.log(th)
-      //   return { uid, th }
-      // } else {
-      //   var t = (
-      //     await prisma.testHistory.findMany({ where: { uid: uid } })
-      //   ).map((i) => i.testId)
+      let f = await redis.exists(uid)
+      if (f) {
+        var th = (await redis.get(uid)) ?? []
+        // console.log(th)
+        return { uid, th }
+      } else {
+        var t = (
+          await prisma.testHistory.findMany({ where: { uid: uid } })
+        ).map((i) => i.testId)
 
-      //   await redis.set(uid, JSON.stringify(t))
-      //   console.log(t)
-      // return { uid, th: t, pubsub }
-      return { uid, pubsub }
+        await redis.set(uid, JSON.stringify(t))
+        return { uid, th: t, pubsub }
+        // return { uid, pubsub }
+      }
     } catch (e) {
       throw new GraphQLError(`${e}`, {
         extensions: {
