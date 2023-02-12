@@ -11,7 +11,7 @@ dotenv.config()
 
 import { default as Redis } from "ioredis"
 export const redis = new Redis()
-
+// export const redis = new Redis('redis://default:redispw@localhost:49153')
 const verifySync = createVerifier({ key: process.env.JWT_SECRET })
 export const yoga = createYoga<{
   uid: string

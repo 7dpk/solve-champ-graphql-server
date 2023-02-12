@@ -3,7 +3,7 @@
 
 generator prisma {
   provider        = "prisma-client-js"
-  previewFeatures = ["filteredRelationCount"]
+  previewFeatures = ["filteredRelationCount", "fullTextIndex"]
 }
 
 generator pothos {
@@ -43,6 +43,7 @@ model User {
   rollCode      String?
   rollNo        String?
   isScholarship Boolean?  @default(false)
+  fcm_token     String?
   target        String[]
 
   doubts             Doubt[]
@@ -85,6 +86,8 @@ model Question {
   difficultyLevel DifficultyLevel @default(EASY)
   testIds         String[]        @db.ObjectId
   tests           Test[]          @relation(fields: [testIds], references: [id])
+
+  @@fulltext([details])
 }
 
 model Test {
@@ -106,7 +109,8 @@ model Test {
   questions    Question[]    @relation(fields: [questionIds], references: [id])
   testHistory  TestHistory[]
   allRatings   Rating[]
-  @@index(fields: [date(sort: Desc)]) 
+
+  @@index(fields: [date(sort: Desc)])
 }
 
 model Chapter {
@@ -119,6 +123,9 @@ model Chapter {
   freeTestCount Int      @default(1)
   testIds       String[] @db.ObjectId
   tests         Test[]
+
+  @@index([subject, class, board])
+  @@fulltext([name])
 }
 
 model Rating {

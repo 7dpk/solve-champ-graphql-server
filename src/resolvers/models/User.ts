@@ -27,6 +27,7 @@ builder.prismaObject("User", {
     isScholarship: t.exposeBoolean("isScholarship", { nullable: true }),
     query: t.relation("Inquiry"),
     queryCount: t.relationCount("Inquiry"),
+    fcm_token: t.exposeString("fcm_token", { nullable: true }),
     doubt: t.relation("doubts"),
     doubtCount: t.relationCount("doubts"),
     resolvedDoubts: t.relationCount("doubts", {
@@ -78,6 +79,7 @@ builder.mutationField("createUser", (t) =>
       studentClass: t.arg.string({ required: true }),
       language: t.arg.string({ required: true }),
       district: t.arg.string(),
+      fcm_token: t.arg.string(),
     },
     resolve: async (query, root, args, ctx) => {
       if (ctx.uid !== args.uid) {
@@ -134,6 +136,7 @@ builder.mutationField("updateUser", (t) =>
       rollNo: t.arg.string(),
       isScholarship: t.arg.boolean(),
       target: t.arg.stringList(),
+      fcm_token: t.arg.string(),
     },
 
     resolve: (query, root, args, ctx) => {
@@ -165,6 +168,7 @@ builder.mutationField("updateUser", (t) =>
           rollCode: args.rollCode ?? undefined,
           rollNo: args.rollNo ?? undefined,
           isScholarship: args.isScholarship ?? undefined,
+          fcm_token: args.fcm_token ?? undefined,
         },
       })
       if (!user) {
