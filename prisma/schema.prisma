@@ -52,6 +52,7 @@ model User {
   allRatings         Rating[]
   CustomNotification CustomNotification[]
   Inquiry            Inquiry[]
+  Comments           Comment[]
 }
 
 model TestHistory {
@@ -113,6 +114,26 @@ model Test {
   @@index(fields: [date(sort: Desc)])
 }
 
+model Video {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  url         String
+  tags        String[]
+  rating      Float?    @default(3.0)
+  videoClass  String
+  board       String
+  subject     String
+  paid        Boolean   @default(false)
+  createdAt   DateTime? @default(now())
+  chapterId   String    @db.ObjectId
+  chapter     Chapter   @relation(fields: [chapterId], references: [id])
+  Comments    Comment[]
+
+  @@index(fields: [createdAt(sort: Desc)])
+  @@fulltext([title])
+}
+
 model Chapter {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   name          String
@@ -123,6 +144,7 @@ model Chapter {
   freeTestCount Int      @default(1)
   testIds       String[] @db.ObjectId
   tests         Test[]
+  videos        Video[]
 
   @@index([subject, class, board])
   @@fulltext([name])
@@ -130,8 +152,8 @@ model Chapter {
 
 model Rating {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  testId   String    @db.ObjectId
-  test     Test      @relation(fields: [testId], references: [id])
+  testId   String?    @db.ObjectId
+  test     Test?      @relation(fields: [testId], references: [id])
   uid      String
   user     User      @relation(fields: [uid], references: [uid])
   date     DateTime? @default(now())
@@ -205,4 +227,14 @@ model Inquiry {
   text String
   uid  String
   user User   @relation(fields: [uid], references: [uid])
+}
+
+model Comment {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  text  String
+  vid   String @db.ObjectId
+  video Video  @relation(fields: [vid], references: [id])
+  uid   String
+  user  User   @relation(fields: [uid], references: [uid])
+  date  DateTime? @default(now())
 }

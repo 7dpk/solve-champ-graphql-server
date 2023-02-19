@@ -17,6 +17,8 @@ builder.prismaObject("Chapter", {
       resolve: (chapter, args, ctx) =>
         chapter.testIds.filter((i) => ctx.th.includes(i)).length,
     }),
+    videos: t.relation("videos"),
+    videoCount: t.relationCount("videos"),
   }),
 })
 // resolve: (chapter, args, ctx) =>

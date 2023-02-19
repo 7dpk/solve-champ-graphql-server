@@ -11,6 +11,9 @@ import "./models/DailyTips"
 import "./models/Doubt"
 import "./models/Micellaneous"
 import "./models/Notification"
+import "./models/Video"
+import "./models/Comment"
 import "./Query"
 import "./Mutation"
+
 export default builder
