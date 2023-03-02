@@ -275,13 +275,31 @@ builder.queryType({
         board: t.arg.string({ required: true }),
         subject: t.arg.string({ required: true }),
       },
-      resolve: (query, root, args, ctx) =>
-      prisma.chapter.findMany({
+      resolve: (query, root, args, ctx) => {
+        if (args.class === 'X' || args.class === '10') {
+          return prisma.chapter.findMany({
+            ...query,
+            where: {
+              OR: [
+                {
+                  class: 'X'
+                },
+                {
+                  class: '10'
+                }
+              ],
+              board: args.board,
+              subject: args.subject
+            }
+          })
+        }
+        return prisma.chapter.findMany({
           ...query,
           where: {
             ...args,
           },
-        }),
+        })
+      },
     }),
     // test history
     rating: t.prismaField({

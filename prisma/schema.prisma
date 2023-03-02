@@ -37,6 +37,7 @@ model User {
   schoolName    String    @default("")
   board         String
   studentClass  String
+  studentStream String? @default("")
   pro           Boolean?  @default(false)
   language      String    @default("Hindi")
   district      String?   @default("")

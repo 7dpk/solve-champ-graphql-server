@@ -25,10 +25,12 @@ export type C = {
   testIds: string[]
 }
 export type T = {
-  id: string
+  id?: string
   name: string
+  logo: string
   instructions: string[]
   rating: number | null
+  ratingCount: number
   testClass: string
   board: string
   subject: string
@@ -36,6 +38,8 @@ export type T = {
   paid: boolean
   passingMarks: number
   chapterId: string
+  chapter: string[]
+  userIds: string[]
   dailyTest: boolean | null
   date: Date | null
   questionIds: string[]
