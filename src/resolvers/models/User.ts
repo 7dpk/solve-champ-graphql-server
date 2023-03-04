@@ -18,7 +18,7 @@ builder.prismaObject("User", {
     schoolName: t.exposeString("schoolName"),
     board: t.exposeString("board"),
     studentClass: t.exposeString("studentClass"),
-    studentStream: t.exposeString("studentStream", {nullable: true}),
+    studentStream: t.exposeString("studentStream", { nullable: true }),
     pro: t.exposeBoolean("pro", { nullable: true }),
     language: t.exposeString("language"),
     district: t.exposeString("district", { nullable: true }),
@@ -43,6 +43,8 @@ builder.prismaObject("User", {
     ratingCount: t.relationCount("allRatings"),
     notification: t.relation("CustomNotification"),
     notificationCount: t.relationCount("CustomNotification"),
+    batches: t.relation("batches"),
+    batchesCount: t.relationCount("batches"),
   }),
 })
 

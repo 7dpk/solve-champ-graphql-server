@@ -11,6 +11,7 @@ builder.prismaObject("EnrollHistory", {
     courseName: t.exposeString("courseName"),
     price: t.exposeString("price"),
     user: t.relation("user"),
+    batch: t.relation("batch"),
   }),
 })
 
@@ -25,6 +26,7 @@ builder.mutationField("createEnrollHistory", (t) =>
       courseName: t.arg.string({ required: true }),
       price: t.arg.string({ required: true }),
       uid: t.arg.string({ required: true }),
+      batchId: t.arg.string({ required: true }),
     },
     resolve: async (query, root, args, ctx) => {
       if (ctx.uid !== args.uid) {
@@ -36,6 +38,16 @@ builder.mutationField("createEnrollHistory", (t) =>
           },
         })
       }
+      await prisma.user.update({
+        where: {
+          uid: args.uid,
+        },
+        data: {
+          batchIds: {
+            push: args.batchId,
+          },
+        },
+      })
       const enrollHistory = await prisma.enrollHistory.create({
         data: {
           ...args,

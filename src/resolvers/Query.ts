@@ -276,21 +276,21 @@ builder.queryType({
         subject: t.arg.string({ required: true }),
       },
       resolve: (query, root, args, ctx) => {
-        if (args.class === 'X' || args.class === '10') {
+        if (args.class === "X" || args.class === "10") {
           return prisma.chapter.findMany({
             ...query,
             where: {
               OR: [
                 {
-                  class: 'X'
+                  class: "X",
                 },
                 {
-                  class: '10'
-                }
+                  class: "10",
+                },
               ],
               board: args.board,
-              subject: args.subject
-            }
+              subject: args.subject,
+            },
           })
         }
         return prisma.chapter.findMany({
@@ -323,6 +323,20 @@ builder.queryType({
       },
       resolve: (query, root, args, ctx) =>
         prisma.rating.findMany({
+          ...query,
+          take: args.take ?? DEFAULT_PAGE_SIZE,
+          skip: args.skip ?? 0,
+        }),
+    }),
+    allBatches: t.prismaField({
+      type: ["Batch"],
+      nullable: true,
+      args: {
+        take: t.arg.int(),
+        skip: t.arg.int(),
+      },
+      resolve: (query, root, args, ctx) =>
+        prisma.batch.findMany({
           ...query,
           take: args.take ?? DEFAULT_PAGE_SIZE,
           skip: args.skip ?? 0,

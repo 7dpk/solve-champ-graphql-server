@@ -22,6 +22,8 @@ model EnrollHistory {
   price      String
   uid        String
   user       User      @relation(fields: [uid], references: [uid])
+  batchId    String    @db.ObjectId
+  batch      Batch     @relation(fields: [batchId], references: [id])
 }
 
 model User {
@@ -37,7 +39,7 @@ model User {
   schoolName    String    @default("")
   board         String
   studentClass  String
-  studentStream String? @default("")
+  studentStream String?   @default("")
   pro           Boolean?  @default(false)
   language      String    @default("Hindi")
   district      String?   @default("")
@@ -54,6 +56,8 @@ model User {
   CustomNotification CustomNotification[]
   Inquiry            Inquiry[]
   Comments           Comment[]
+  batchIds           String[]             @db.ObjectId
+  batches            Batch[]              @relation(fields: [batchIds], references: [id])
 }
 
 model TestHistory {
@@ -127,9 +131,12 @@ model Video {
   subject     String
   paid        Boolean   @default(false)
   createdAt   DateTime? @default(now())
-  chapterId   String    @db.ObjectId
-  chapter     Chapter   @relation(fields: [chapterId], references: [id])
-  Comments    Comment[]
+  chapterId   String?   @db.ObjectId
+  chapter     Chapter?  @relation(fields: [chapterId], references: [id])
+  batchIds    String[]  @db.ObjectId
+  Batch       Batch[]   @relation(fields: [batchIds], references: [id])
+
+  Comments Comment[]
 
   @@index(fields: [createdAt(sort: Desc)])
   @@fulltext([title])
@@ -145,6 +152,7 @@ model Chapter {
   freeTestCount Int      @default(1)
   testIds       String[] @db.ObjectId
   tests         Test[]
+  videoIds      String[] @db.ObjectId
   videos        Video[]
 
   @@index([subject, class, board])
@@ -153,8 +161,8 @@ model Chapter {
 
 model Rating {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  testId   String?    @db.ObjectId
-  test     Test?      @relation(fields: [testId], references: [id])
+  testId   String?   @db.ObjectId
+  test     Test?     @relation(fields: [testId], references: [id])
   uid      String
   user     User      @relation(fields: [uid], references: [uid])
   date     DateTime? @default(now())
@@ -231,11 +239,34 @@ model Inquiry {
 }
 
 model Comment {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  id    String    @id @default(auto()) @map("_id") @db.ObjectId
   text  String
-  vid   String @db.ObjectId
-  video Video  @relation(fields: [vid], references: [id])
+  vid   String    @db.ObjectId
+  video Video     @relation(fields: [vid], references: [id])
   uid   String
-  user  User   @relation(fields: [uid], references: [uid])
+  user  User      @relation(fields: [uid], references: [uid])
   date  DateTime? @default(now())
+}
+
+model Batch {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  picUrl          String
+  title           String
+  description     String
+  batchCode       String          @unique
+  class           String
+  subject         String
+  board           String
+  teachers        String[]
+  price           Int
+  startDate       DateTime?
+  endDate         DateTime?
+  createdAt       DateTime?       @default(now())
+  userIds         String[]        @db.ObjectId
+  users           User[]          @relation(fields: [userIds], references: [id])
+  videoIds        String[]        @db.ObjectId
+  videos          Video[]         @relation(fields: [videoIds], references: [id])
+  enrollHistories EnrollHistory[]
+
+  @@index(fields: [createdAt(sort: Desc)])
 }

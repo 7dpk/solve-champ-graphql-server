@@ -13,7 +13,7 @@ import "./models/Micellaneous"
 import "./models/Notification"
 import "./models/Video"
 import "./models/Comment"
+import "./models/Batch"
 import "./Query"
 import "./Mutation"
-
 export default builder
